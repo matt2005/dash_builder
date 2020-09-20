@@ -27,20 +27,17 @@ jobs:
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
-      -
-        name: Copy Example Config
-        id: configure
-        run: | 
-          cp config.example config
       - 
         name: Get the version
         id: get_version
         run: |
           echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
       - 
-        name: Set the version
-        id: set_version
-        run: sed -i "s|crankshaft-ng|${version}|g" config
+        name: pi-gen config
+        id: pigen_config
+        run: |
+          echo "IMG_NAME=my_name" > ./pi-gen/config 
+          #sed -i "s|my_name|${version}|g" ./pi-gen/config
         env:
           version: ${{ steps.get_version.outputs.version }}
       -
