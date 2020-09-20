@@ -41,7 +41,11 @@ jobs:
         name: pi-gen config
         id: pi-gen_config
         run: |
-          echo "IMG_NAME='${version}'" > config
+          cat > config <<EOF
+          IMG_NAME='${version}'
+          FIRST_USER_NAME = 'opendsh'
+          FIRST_USER_PASS = 'opendsh'
+          EOF
           touch ./stage4/SKIP ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
         working-directory: ./pi-gen
@@ -51,7 +55,6 @@ jobs:
         name: opendsh
         id: opendsh
         run: |
-          pushd
           rm -rf ./stage3 ./stage4 ./stage5
           mkdir -p ./stage3/00-install-dash
           cd ./stage3
@@ -66,15 +69,14 @@ jobs:
           chmod +x prerun.sh
           cat > 00-install-dash/00-run-chroot.sh <<EOF
           #!/bin/bash
-          pushd
           echo "Cloning Dash"
           git clone git@github.com:openDsh/dash.git files
           echo "Installing Dash"
           cd files
+          on_chroot << END
           ./install.sh
-          popd
+          END
           EOF
-          popd
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
