@@ -30,22 +30,23 @@ jobs:
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
-#      - 
-#        name: Get the version
-#        id: get_version
-#        run: |
-#          echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      - 
+        name: Get the version
+        id: get_version
+        run: |
+          echo ::set-output name=version::"${version}-lite"
+        env:
+          version: ${{ github.event.inputs.version }}
       - 
         name: pi-gen config
-        id: pigen_config
+        id: pi-gen_config
         run: |
-          echo "IMG_NAME='${version}-lite'" > config
+          echo "IMG_NAME='${version}'" > config
           touch ./stage3/SKIP ./stage4/SKIP ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
         working-directory: ./pi-gen
         env:
-          #version: ${{ steps.get_version.outputs.version }}
-          version: ${{ github.event.inputs.version }}
+          version: ${{ steps.get_version.outputs.version }}
       -
         name: Run build
         id: build-docker
@@ -56,8 +57,19 @@ jobs:
         id: upload_deploy
         uses: actions/upload-artifact@v2
         with:
-          name: delpoy
+          name: deploy
           path: ./pi-gen/deploy*
+      -
+        name: 'Tar files'
+        run: |
+          tar -cvf work.tar ./pi-gen/work
+      - 
+        name: Upload work artifacts 
+        id: upload_work
+        uses: actions/upload-artifact@v2
+        with:
+          name: work
+          path: ./work.tar
 #      - 
 #        name: Create Release
 #        id: create_release
