@@ -43,8 +43,8 @@ jobs:
         run: |
           cat > config <<EOF
           IMG_NAME='${version}'
-          FIRST_USER_NAME = 'opendsh'
-          FIRST_USER_PASS = 'opendsh'
+          FIRST_USER_NAME='opendsh'
+          FIRST_USER_PASS='opendsh'
           EOF
           touch ./stage4/SKIP ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
@@ -73,13 +73,21 @@ jobs:
           git clone git@github.com:openDsh/dash.git files
           echo "Installing Dash"
           cd files
-          on_chroot << END
           ./install.sh
-          END
           EOF
+          chmod +x 00-install-dash/00-run-chroot.sh
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
+      -
+       name: show config
+       id: show_config
+       run: |
+          cat config
+          cat ./stage3/EXPORT_NOOBS
+          cat ./stage3/EXPORT_IMAGE
+          cat ./stage3/00-install-dash/00-run-chroot.sh
+       working-directory: ./pi-gen
       -
         name: Run build
         id: build-docker
