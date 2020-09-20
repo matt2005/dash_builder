@@ -67,13 +67,12 @@ jobs:
           NOOBS_NAME="Opendsh (32-bit) - ${version}"
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
-          cat > 00-install-dash/00-packages-nr <<EOF
-          git
-          EOF
+#          cat > 00-install-dash/00-packages-nr <<EOF
+#          git
+#          EOF
+          cp -Rv ../../dash 00-install-dash/files
           cat > 00-install-dash/01-run-chroot.sh <<EOF
           #!/bin/bash
-          echo "Cloning Dash"
-          git clone git@github.com:openDsh/dash.git files
           echo "Installing Dash"
           cd files
           ./install.sh
@@ -89,8 +88,6 @@ jobs:
           cat config
           cat ./stage3/EXPORT_NOOBS
           cat ./stage3/EXPORT_IMAGE
-          cat ./stage3/00-install-dash/00-packages-nr
-          cat ./stage3/00-install-dash/01-run-chroot.sh
        working-directory: ./pi-gen
       -
         name: Run build
