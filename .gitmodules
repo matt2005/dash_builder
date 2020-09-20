@@ -1,0 +1,6 @@
+[submodule "dash"]
+	path = dash
+	url = git@github.com:openDsh/dash.git
+[submodule "pi-gen"]
+	path = pi-gen
+	url = git@github.com:RPi-Distro/pi-gen.git
