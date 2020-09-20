@@ -10,6 +10,9 @@ on:
       - '*.*.*'
 #  pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
 
 jobs:
   docker:
@@ -27,23 +30,27 @@ jobs:
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
-      - 
-        name: Get the version
-        id: get_version
-        run: |
-          echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+#      - 
+#        name: Get the version
+#        id: get_version
+#        run: |
+#          echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
       - 
         name: pi-gen config
         id: pigen_config
         run: |
-          echo "IMG_NAME=my_name" > ./pi-gen/config 
-          #sed -i "s|my_name|${version}|g" ./pi-gen/config
+          echo "IMG_NAME='${version}'" > config
+          touch ./stage3/SKIP ./stage4/SKIP ./stage5/SKIP
+          touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
+        working-directory: ./pi-gen
         env:
-          version: ${{ steps.get_version.outputs.version }}
+          #version: ${{ steps.get_version.outputs.version }}
+          version: ${{ github.event.inputs.version }}
       -
         name: Run build
         id: build-docker
-        run: bash ./pi-gen/build-docker.sh
+        run: bash ./build-docker.sh
+        working-directory: ./pi-gen
       - 
         name: Create Release
         id: create_release
@@ -59,7 +66,7 @@ jobs:
         name: Get Name of Artifact
         id: get-artifact-name
         run: |
-          ls -hla
+          ls ./pi-gen -hla
           ARTIFACT_PATHNAME=$(ls ./pi-gen/deploy/*.zip | head -n 1)
           ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
           echo ::set-output name=artifact_filename::${ARTIFACT_NAME}
