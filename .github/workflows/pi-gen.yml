@@ -67,13 +67,30 @@ jobs:
           NOOBS_NAME="Opendsh (32-bit) - ${version}"
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
-          cp -Rv ../../dash 00-install-dash/files
-          chmod +x 00-install-dash/files/install.sh
+          tar -cvjf ../../dash 00-install-dash/files/dash.tar.bz2
+          cat > 00-install-dash/00-run.sh <<EOF
+          #!/bin/bash -e
+          
+          on_chroot << END
+          echo '>>> Set Debian frontend to Noninteractive'
+          echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+          export DEBIAN_FRONTEND=noninteractive
+          echo '>>> Update CA certs for a secure connection to GitHub'
+          update-ca-certificates -f
+          echo '>>> Download latest Dash Installer'
+          git clone --depth=1 https://github.com/openDsh/dash.git /home/${FIRST_USER_NAME}/dash
+          chmod -R 775 /home/${FIRST_USER_NAME}/dash
+          chown -R ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/dash
+          END
+          EOF
+          chmod +x 00-install-dash/00-run.sh
           cat > 00-install-dash/01-run.sh <<EOF
           #!/bin/bash -e
 
+          on_chroot << END
           echo "Installing Dash"
-          bash ./files/install.sh
+          /home/${FIRST_USER_NAME}/dash/install.sh
+          END
           EOF
           chmod +x 00-install-dash/01-run.sh
           cat > 00-install-dash/02-run-chroot.sh <<EOF
