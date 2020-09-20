@@ -3,11 +3,7 @@ name: build
 on:
 #  schedule:
 #    - cron: '0 10 * * *' # everyday at 10am
-  push:
-#    branches:
-#      - '**'
-    tags:
-      - '*.*.*'
+
 #  pull_request:
   workflow_dispatch:
     inputs:
@@ -15,7 +11,7 @@ on:
         description: 'Version'
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
     steps:
       -
@@ -80,7 +76,7 @@ jobs:
           echo '>>> Update CA certs for a secure connection to GitHub'
           update-ca-certificates -f
           echo '>>> Download latest Dash Installer'
-          git clone --depth=1 https://github.com/openDsh/dash.git /home/${FIRST_USER_NAME}/dash
+          git clone --depth=1 https://github.com/matt2005/dash.git /home/${FIRST_USER_NAME}/dash
           chmod -R 775 /home/${FIRST_USER_NAME}/dash
           chown -R ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/dash
           END
@@ -127,34 +123,43 @@ jobs:
             ./pi-gen/deploy/*.info
             ./pi-gen/deploy/*.zip
             ./pi-gen/deploy/build.log
-#      - 
-#        name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ github.ref }}
-#          release_name: Release ${{ github.ref }}
-#          draft: true
-#          prerelease: true
-#      - 
-#        name: Get Name of Artifact
-#        id: get-artifact-name
-#        run: |
-#          ls ./pi-gen -hla
-#          ARTIFACT_PATHNAME=$(ls ./pi-gen/deploy/*.zip | head -n 1)
-#          ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
-#          echo ::set-output name=artifact_filename::${ARTIFACT_NAME}
-#          echo ::set-output name=artifact_path::${ARTIFACT_PATHNAME}
-#      - 
-#        name: Upload Release Asset
-#        id: upload-release-asset 
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-#          asset_path: ${{ steps.get-artifact-name.outputs.artifact_path }}
-#          asset_name: ${{ steps.get-artifact-name.outputs.artifact_filename }}
-#          asset_content_type: application/zip
+  release:
+    needs: [build]
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
+          draft: true
+          prerelease: true
+      - 
+        name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: deploy
+      - 
+        name: Get Release File Name & Upload URL
+        id: get_release_info
+        run: |
+          ARTIFACT_PATHNAME=$(ls deploy/*.zip | head -n 1)
+          ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
+          echo ::set-output name=artifact_filename::${ARTIFACT_NAME}
+          echo ::set-output name=artifact_path::${ARTIFACT_PATHNAME}
+      - 
+        name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.get-artifact-name.outputs.artifact_path }}
+          asset_name: ${{ steps.get-artifact-name.outputs.artifact_filename }}
+          asset_content_type: application/zip
