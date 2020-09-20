@@ -67,9 +67,6 @@ jobs:
           NOOBS_NAME="Opendsh (32-bit) - ${version}"
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
-#          cat > 00-install-dash/00-packages-nr <<EOF
-#          git
-#          EOF
           cp -Rv ../../dash 00-install-dash/files
           cat > 00-install-dash/01-run-chroot.sh <<EOF
           #!/bin/bash
