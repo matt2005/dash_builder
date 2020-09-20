@@ -71,8 +71,9 @@ jobs:
           cat > 00-install-dash/01-run-chroot.sh <<EOF
           #!/bin/bash
           echo "Installing Dash"
-          cd files
-          ./install.sh
+          ls -hlaR
+          chmod +x files/install.sh
+          ./files/install.sh
           EOF
           chmod +x 00-install-dash/01-run-chroot.sh
         working-directory: ./pi-gen
