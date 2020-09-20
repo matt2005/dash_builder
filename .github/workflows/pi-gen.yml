@@ -68,14 +68,20 @@ jobs:
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
           cp -Rv ../../dash 00-install-dash/files
-          cat > 00-install-dash/01-run-chroot.sh <<EOF
-          #!/bin/bash
+          chmod +x 00-install-dash/files/install.sh
+          cat > 00-install-dash/01-run.sh <<EOF
+          #!/bin/bash -e
+
           echo "Installing Dash"
-          ls -hlaR
-          chmod +x files/install.sh
-          ./files/install.sh
+          bash ./files/install.sh
           EOF
-          chmod +x 00-install-dash/01-run-chroot.sh
+          chmod +x 00-install-dash/01-run.sh
+          cat > 00-install-dash/02-run-chroot.sh <<EOF
+          #!/bin/bash -e
+          
+          apt-get autoremove -y --purge
+          EOF
+          chmod +x 00-install-dash/02-run-chroot.sh
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
