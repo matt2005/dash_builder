@@ -89,7 +89,8 @@ jobs:
           cat config
           cat ./stage3/EXPORT_NOOBS
           cat ./stage3/EXPORT_IMAGE
-          cat ./stage3/00-install-dash/00-run-chroot.sh
+          cat ./stage3/00-install-dash/00-packages-nr
+          cat ./stage3/00-install-dash/01-run-chroot.sh
        working-directory: ./pi-gen
       -
         name: Run build
