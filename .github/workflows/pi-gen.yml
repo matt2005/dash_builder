@@ -57,8 +57,9 @@ jobs:
         run: |
           rm -rf ./stage3 ./stage4 ./stage5
           mkdir -p ./stage3/00-install-dash
-          cp ./stage2/prerun.sh prerun.sh
           cd ./stage3
+          cp ../stage2/prerun.sh prerun.sh
+          chmod +x prerun.sh
           cat > EXPORT_IMAGE <<EOF
           IMG_SUFFIX="-opendsh"
           EOF
@@ -66,7 +67,6 @@ jobs:
           NOOBS_NAME="Opendsh (32-bit) - ${version}"
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
-          chmod +x prerun.sh
           cat > 00-install-dash/00-run-chroot.sh <<EOF
           #!/bin/bash
           echo "Cloning Dash"
