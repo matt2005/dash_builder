@@ -89,18 +89,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: deploy
-          path: ./pi-gen/deploy/${version}*.*
-      -
-        name: 'Tar files'
-        run: |
-          tar -cvf work.tar ./pi-gen/work
-      - 
-        name: Upload work artifacts 
-        id: upload_work
-        uses: actions/upload-artifact@v2
-        with:
-          name: work
-          path: ./work.tar
+          path: |
+            ./pi-gen/deploy/*.info
+            ./pi-gen/deploy/*.zip
+            ./pi-gen/deploy/build.log
 #      - 
 #        name: Create Release
 #        id: create_release
