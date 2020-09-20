@@ -34,7 +34,7 @@ jobs:
         name: Get the version
         id: get_version
         run: |
-          echo ::set-output name=version::"${version}-lite"
+          echo ::set-output name=version::"${version}"
         env:
           version: ${{ github.event.inputs.version }}
       - 
@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: deploy
-          path: ./pi-gen/deploy*
+          path: ./pi-gen/deploy/${version}*.*
       -
         name: 'Tar files'
         run: |
