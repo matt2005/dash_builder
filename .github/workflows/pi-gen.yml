@@ -121,8 +121,8 @@ jobs:
         with:
           name: deploy
           path: |
-            ./pi-gen/deploy/*.info
-            ./pi-gen/deploy/*.zip
+            ./pi-gen/deploy/*-opendsh.info
+            ./pi-gen/deploy/*-opendsh.zip
             ./pi-gen/deploy/build.log
   release:
     needs: [build]
@@ -161,6 +161,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ steps.get-artifact-name.outputs.artifact_path }}
-          asset_name: ${{ steps.get-artifact-name.outputs.artifact_filename }}
+          asset_path: ${{ steps.get_release_info.outputs.artifact_path }}
+          asset_name: ${{ steps.get_release_info.outputs.artifact_filename }}
           asset_content_type: application/zip
