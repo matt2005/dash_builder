@@ -39,14 +39,16 @@ jobs:
         run: |
           cat > config <<EOF
           IMG_NAME='${version}'
-          FIRST_USER_NAME='opendsh'
-          FIRST_USER_PASS='opendsh'
+          FIRST_USER_NAME='${FIRST_USER_NAME}'
+          FIRST_USER_PASS='${FIRST_USER_NAME}'
           EOF
           touch ./stage4/SKIP ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
+          echo ::set-output name=FIRST_USER_NAME::"${FIRST_USER_NAME}"
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
+          FIRST_USER_NAME: 'opendsh'
       -
         name: opendsh
         id: opendsh
@@ -87,8 +89,8 @@ jobs:
 
           on_chroot << END
           echo "Installing Dash"
-          sed 's/message( WARNING/message( /g' /home/${FIRST_USER_NAME}/dash/cmake_modules/functions.cmake
-          /home/${FIRST_USER_NAME}/dash/install.sh
+          sed -i -e 's/message( WARNING/message( /g' /home/${FIRST_USER_NAME}/dash/cmake_modules/functions.cmake
+          ./home/${FIRST_USER_NAME}/dash/install.sh
           END
           EOF
           chmod +x 00-install-dash/01-run.sh
@@ -98,9 +100,44 @@ jobs:
           apt-get autoremove -y --purge
           EOF
           chmod +x 00-install-dash/02-run-chroot.sh
+          cat > 00-install-dash/03-run.sh <<EOF
+          #!/bin/bash -e
+          
+          mkdir -p /home/${FIRST_USER_NAME}/.ssh
+          chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh
+          chmod 700 /home/${FIRST_USER_NAME}/.ssh
+          touch /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          EOF
+          chmod +x 00-install-dash/03-run.sh
+          cat > 00-install-dash/04-run-chroot.sh <<EOF
+          #!/bin/bash -e
+          cat > /lib/systemd/system/dash.service <<END
+          [Unit]
+          Description=Start Dash
+  
+          [Service]
+          Environment=DISPLAY=:0
+          Environment=XAUTHORITY=/home/${FIRST_USER_NAME}/.Xauthority
+          WorkingDirectory=/home/${FIRST_USER_NAME}
+          ExecStart=/home/${FIRST_USER_NAME}/dash/bin/ia
+          Restart=always
+          RestartSec=10s
+          KillMode=process
+          TimeoutSec=infinity
+  
+          [Install]
+          WantedBy=graphical.target
+          END
+          systemctl daemon-reload
+          systemctl enable dash.service
+          EOF
+          chmod +x 00-install-dash/04-run-chroot.sh
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
+          FIRST_USER_NAME: ${{ steps.pi-gen_config.outputs.FIRST_USER_NAME }}
       -
        name: show config
        id: show_config
