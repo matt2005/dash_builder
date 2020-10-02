@@ -53,8 +53,9 @@ jobs:
         name: opendsh
         id: opendsh
         run: |
-          mkdir -p ./stage6/00-install-dash
-          cd ./stage6
+          rm -rf ./stage3 ./stage4 ./stage5
+          mkdir -p ./stage3/00-install-dash
+          cd ./stage3
           cp ../stage2/prerun.sh prerun.sh
           chmod +x prerun.sh
           cat > EXPORT_IMAGE <<EOF
@@ -64,10 +65,19 @@ jobs:
           NOOBS_NAME="Opendsh (32-bit) - ${version}"
           NOOBS_DESCRIPTION="Opendsh - ${version}"
           EOF
-          cat > 00-install-dash/00-packages <<EOF
+          cat > 00-prereqs/00-packages <<EOF
           git
           EOF
-          cat > 00-install-dash/00-run.sh <<EOF
+          cat > 01-packages/00-packages-nr <<EOF
+          xserver-xorg-core
+          xserver-xorg
+          xfonts-base
+          xinit
+          xfce4
+          desktop-base
+          lightdm
+          EOF
+          cat > 02-install-dash/00-run.sh <<EOF
           #!/bin/bash -e
           
           on_chroot << END
@@ -82,8 +92,8 @@ jobs:
           chown -R ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/dash
           END
           EOF
-          chmod +x 00-install-dash/00-run.sh
-          cat > 00-install-dash/01-run.sh <<EOF
+          chmod +x 02-install-dash/00-run.sh
+          cat > 02-install-dash/01-run.sh <<EOF
           #!/bin/bash -e
 
           on_chroot << END
@@ -92,14 +102,14 @@ jobs:
           ./home/${FIRST_USER_NAME}/dash/install.sh
           END
           EOF
-          chmod +x 00-install-dash/01-run.sh
-          cat > 00-install-dash/02-run-chroot.sh <<EOF
+          chmod +x 02-install-dash/01-run.sh
+          cat > 02-install-dash/02-run-chroot.sh <<EOF
           #!/bin/bash -e
           
           apt-get autoremove -y --purge
           EOF
-          chmod +x 00-install-dash/02-run-chroot.sh
-          cat > 00-install-dash/03-run.sh <<EOF
+          chmod +x 02-install-dash/02-run-chroot.sh
+          cat > 02-install-dash/03-run.sh <<EOF
           #!/bin/bash -e
           
           mkdir -p /home/${FIRST_USER_NAME}/.ssh
@@ -109,8 +119,8 @@ jobs:
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           EOF
-          chmod +x 00-install-dash/03-run.sh
-          cat > 00-install-dash/04-run-chroot.sh <<EOF
+          chmod +x 02-install-dash/03-run.sh
+          cat > 02-install-dash/04-run-chroot.sh <<EOF
           #!/bin/bash -e
           cat > /lib/systemd/system/dash.service <<END
           [Unit]
@@ -132,7 +142,7 @@ jobs:
           systemctl daemon-reload
           systemctl enable dash.service
           EOF
-          chmod +x 00-install-dash/04-run-chroot.sh
+          chmod +x 02-install-dash/04-run-chroot.sh
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
@@ -142,8 +152,8 @@ jobs:
        id: show_config
        run: |
           cat config
-          cat ./stage6/EXPORT_NOOBS
-          cat ./stage6/EXPORT_IMAGE
+          cat ./stage3/EXPORT_NOOBS
+          cat ./stage3/EXPORT_IMAGE
        working-directory: ./pi-gen
       -
         name: Run build
