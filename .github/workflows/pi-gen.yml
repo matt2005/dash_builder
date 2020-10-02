@@ -42,7 +42,7 @@ jobs:
           FIRST_USER_NAME='${FIRST_USER_NAME}'
           FIRST_USER_PASS='${FIRST_USER_NAME}'
           EOF
-          touch ./stage4/SKIP ./stage5/SKIP
+          touch ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
           echo ::set-output name=FIRST_USER_NAME::"${FIRST_USER_NAME}"
         working-directory: ./pi-gen
@@ -53,9 +53,8 @@ jobs:
         name: opendsh
         id: opendsh
         run: |
-          rm -rf ./stage3 ./stage4 ./stage5
-          mkdir -p ./stage3/00-install-dash
-          cd ./stage3
+          mkdir -p ./stage6/00-install-dash
+          cd ./stage6
           cp ../stage2/prerun.sh prerun.sh
           chmod +x prerun.sh
           cat > EXPORT_IMAGE <<EOF
@@ -143,8 +142,8 @@ jobs:
        id: show_config
        run: |
           cat config
-          cat ./stage3/EXPORT_NOOBS
-          cat ./stage3/EXPORT_IMAGE
+          cat ./stage6/EXPORT_NOOBS
+          cat ./stage6/EXPORT_IMAGE
        working-directory: ./pi-gen
       -
         name: Run build
