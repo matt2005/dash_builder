@@ -54,7 +54,9 @@ jobs:
         id: opendsh
         run: |
           rm -rf ./stage3 ./stage4 ./stage5
-          mkdir -p ./stage3/00-install-dash
+          mkdir -p ./stage3/00-prereqs
+          mkdir -p ./stage3/01-packages
+          mkdir -p ./stage3/02-install-dash
           cd ./stage3
           cp ../stage2/prerun.sh prerun.sh
           chmod +x prerun.sh
