@@ -41,6 +41,7 @@ jobs:
           IMG_NAME='${version}'
           FIRST_USER_NAME='${FIRST_USER_NAME}'
           FIRST_USER_PASS='${FIRST_USER_NAME}'
+          USE_QCOW2=0
           EOF
           touch ./stage5/SKIP
           touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
