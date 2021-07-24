@@ -96,16 +96,7 @@ jobs:
           END
           EOF
           chmod +x 02-install-dash/00-run.sh
-          cat > 02-install-dash/01-run.sh <<EOF
-          #!/bin/bash -e
 
-          on_chroot << END
-          echo "Installing Dash"
-          sed -i -e 's/message( WARNING/message( /g' /home/${FIRST_USER_NAME}/dash/cmake_modules/functions.cmake
-          ./home/${FIRST_USER_NAME}/dash/install.sh
-          END
-          EOF
-          chmod +x 02-install-dash/01-run.sh
           cat > 02-install-dash/02-run-chroot.sh <<EOF
           #!/bin/bash -e
           
@@ -123,29 +114,6 @@ jobs:
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           EOF
           chmod +x 02-install-dash/03-run.sh
-          cat > 02-install-dash/04-run-chroot.sh <<EOF
-          #!/bin/bash -e
-          cat > /lib/systemd/system/dash.service <<END
-          [Unit]
-          Description=Start Dash
-  
-          [Service]
-          Environment=DISPLAY=:0
-          Environment=XAUTHORITY=/home/${FIRST_USER_NAME}/.Xauthority
-          WorkingDirectory=/home/${FIRST_USER_NAME}
-          ExecStart=/home/${FIRST_USER_NAME}/dash/bin/ia
-          Restart=always
-          RestartSec=10s
-          KillMode=process
-          TimeoutSec=infinity
-  
-          [Install]
-          WantedBy=graphical.target
-          END
-          systemctl daemon-reload
-          systemctl enable dash.service
-          EOF
-          chmod +x 02-install-dash/04-run-chroot.sh
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
