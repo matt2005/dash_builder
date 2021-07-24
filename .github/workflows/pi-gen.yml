@@ -105,7 +105,7 @@ jobs:
           chmod +x 02-install-dash/02-run-chroot.sh
           cat > 02-install-dash/03-run.sh <<EOF
           #!/bin/bash -e
-          
+          useradd ${FIRST_USER_NAME}
           mkdir -p /home/${FIRST_USER_NAME}/.ssh
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh
           chmod 700 /home/${FIRST_USER_NAME}/.ssh
