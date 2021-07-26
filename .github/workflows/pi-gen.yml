@@ -41,6 +41,7 @@ jobs:
           IMG_NAME='${version}'
           FIRST_USER_NAME='${FIRST_USER_NAME}'
           FIRST_USER_PASS='${FIRST_USER_NAME}'
+          TARGET_HOSTNAME='opendsh'
           USE_QCOW2=0
           EOF
           touch ./stage5/SKIP
@@ -80,6 +81,49 @@ jobs:
           desktop-base
           lightdm
           EOF
+          
+          cat > 01-packages/01-packages <<EOF
+          gstreamer1.0-plugins-good
+          gstreamer1.0-omx
+          xserver-xorg-video-fbturbo
+          alsa-utils
+          cmake
+          libboost-all-dev
+          libusb-1.0.0-dev
+          libssl-dev
+          libprotobuf-dev
+          protobuf-c-compiler
+          protobuf-compiler
+          libqt5multimedia5
+          libqt5multimedia5-plugins
+          libqt5multimediawidgets5
+          qtmultimedia5-dev
+          libqt5bluetooth5
+          libqt5bluetooth5-bin
+          qtconnectivity5-dev
+          pulseaudio
+          librtaudio-dev
+          librtaudio6
+          libkf5bluezqt-dev
+          libtag1-dev
+          qml-module-qtquick2
+          libglib2.0-dev
+          libgstreamer1.0-dev
+          gstreamer1.0-plugins-base-apps
+          gstreamer1.0-plugins-bad
+          gstreamer1.0-libav
+          gstreamer1.0-alsa
+          libgstreamer-plugins-base1.0-dev
+          qtdeclarative5-dev
+          qt5-default
+          libgstreamer-plugins-bad1.0-dev
+          libunwind-dev
+          qml-module-qtmultimedia
+          libqt5serialbus5-dev
+          libqt5serialbus5-plugins
+          libqt5serialport5-dev
+          libqt5websockets5-dev
+          EOF
           cat > 02-install-dash/00-run.sh <<EOF
           #!/bin/bash -e
           
@@ -96,7 +140,39 @@ jobs:
           END
           EOF
           chmod +x 02-install-dash/00-run.sh
-
+          cat > 02-install-dash/01-run.sh <<EOF
+          #!/bin/bash -e
+          
+          on_chroot << END
+          echo "Installing Dash"
+          sed -i -e 's/message( WARNING/message( /g' /home/${FIRST_USER_NAME}/dash/cmake_modules/functions.cmake
+          #./home/${FIRST_USER_NAME}/dash/install.sh
+          END
+          EOF
+          chmod +x 02-install-dash/01-run.sh
+          cat > 02-install-dash/04-run-chroot.sh <<EOF
+          #!/bin/bash -e
+          cat > /lib/systemd/system/dash.service <<END
+          [Unit]
+          Description=Start Dash
+          
+          [Service]
+          Environment=DISPLAY=:0
+          Environment=XAUTHORITY=/home/${FIRST_USER_NAME}/.Xauthority
+          WorkingDirectory=/home/${FIRST_USER_NAME}
+          ExecStart=/home/${FIRST_USER_NAME}/dash/bin/dash
+          Restart=always
+          RestartSec=10s
+          KillMode=process
+          TimeoutSec=infinity
+          
+          [Install]
+          WantedBy=graphical.target
+          END
+          systemctl daemon-reload
+          systemctl enable dash.service
+          EOF
+          chmod +x 02-install-dash/04-run-chroot.sh
           cat > 02-install-dash/02-run-chroot.sh <<EOF
           #!/bin/bash -e
           
@@ -114,6 +190,29 @@ jobs:
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           EOF
           chmod +x 02-install-dash/03-run.sh
+          mkdir -p 02-install-dash/files
+          cp ../../packages/* 02-install-dash/files/home/${FIRST_USER_NAME}/
+          cat > 02-install-dash/04-run-chroot.sh <<EOF
+          #!/bin/bash -e
+          on_chroot << END
+          dpkg -i /home/${FIRST_USER_NAME}/aasdk_2.1.0_armhf.deb
+          dpkg -i /home/${FIRST_USER_NAME}/QtGStreamer-0.1.1-Linux.deb
+          dpkg -i /home/${FIRST_USER_NAME}/openauto_2.1.0_armhf.deb
+          dpkg -i /home/${FIRST_USER_NAME}/dash_f825ff8_armhf.deb
+          END
+          EOF
+          chmod +x 02-install-dash/04-run-chroot.sh
+          cat > 03-dash-tweaks/00-run-chroot.sh <<EOF
+          #!/bin/bash -e
+          on_chroot << END
+          raspi-config nonint do_memory_split 128
+          raspi-config nonint do_gldriver G2
+          # Console Autologin
+          raspi-config nonint do_boot_behaviour B2
+          END
+          EOF
+          chmod +x 03-dash-tweaks/00-run-chroot.sh
+          
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
