@@ -201,10 +201,10 @@ jobs:
           cat > 02-install-dash/04-run-chroot.sh <<EOF
           #!/bin/bash -e
           on_chroot << END
-          dpkg -i /home/${FIRST_USER_NAME}/aasdk_2.1.0_armhf.deb
-          dpkg -i /home/${FIRST_USER_NAME}/QtGStreamer-0.1.1-Linux.deb
-          dpkg -i /home/${FIRST_USER_NAME}/openauto_2.1.0_armhf.deb
-          dpkg -i /home/${FIRST_USER_NAME}/dash_f825ff8_armhf.deb
+          #dpkg -i /home/${FIRST_USER_NAME}/aasdk_2.1.0_armhf.deb
+          #dpkg -i /home/${FIRST_USER_NAME}/QtGStreamer-0.1.1-Linux.deb
+          #dpkg -i /home/${FIRST_USER_NAME}/openauto_2.1.0_armhf.deb
+          #dpkg -i /home/${FIRST_USER_NAME}/dash_f825ff8_armhf.deb
           END
           EOF
           chmod +x 02-install-dash/04-run-chroot.sh
