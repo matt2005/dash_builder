@@ -213,7 +213,7 @@ jobs:
           #!/bin/bash -e
           on_chroot << END
           raspi-config nonint do_memory_split 128
-          raspi-config nonint do_gldriver G2
+          #raspi-config nonint do_gldriver G2
           # Console Autologin
           raspi-config nonint do_boot_behaviour B2
           END
