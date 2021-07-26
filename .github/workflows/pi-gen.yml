@@ -190,7 +190,7 @@ jobs:
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           EOF
           chmod +x 02-install-dash/03-run.sh
-          mkdir -p 02-install-dash/files
+          mkdir -p 02-install-dash/files/home/${FIRST_USER_NAME}/
           cp ../../packages/* 02-install-dash/files/home/${FIRST_USER_NAME}/
           cat > 02-install-dash/04-run-chroot.sh <<EOF
           #!/bin/bash -e
