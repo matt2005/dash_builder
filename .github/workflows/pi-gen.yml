@@ -179,6 +179,10 @@ jobs:
           apt-get autoremove -y --purge
           EOF
           chmod +x 02-install-dash/02-run-chroot.sh
+          mkdir -p 02-install-dash/files
+          cp ../../packages/*.deb 02-install-dash/files/
+          ls -hla ../../packages/
+          ls -hla 02-install-dash/files/
           cat > 02-install-dash/03-run.sh <<EOF
           #!/bin/bash -e
           useradd ${FIRST_USER_NAME}
@@ -188,10 +192,10 @@ jobs:
           touch /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
-          install -m 755 ../../packages/aasdk_2.1.0_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
-          install -m 755 ../../packages/QtGStreamer-0.1.1-Linux.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
-          install -m 755 ../../packages/openauto_2.1.0_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
-          install -m 755 ../../packages/dash_f825ff8_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
+          install -m 755 files/aasdk_2.1.0_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
+          install -m 755 files/QtGStreamer-0.1.1-Linux.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
+          install -m 755 files/openauto_2.1.0_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
+          install -m 755 files/dash_f825ff8_armhf.deb           "${ROOTFS_DIR}/home/${FIRST_USER_NAME}/"
           EOF
           chmod +x 02-install-dash/03-run.sh
           cat > 02-install-dash/04-run-chroot.sh <<EOF
