@@ -173,12 +173,14 @@ jobs:
           EOCAT
           EOF
           chmod +x  00-prereqs/01-run.sh
-          cat >  00-prereqs/02-run-chroot.sh <<EOF
+          cat >  00-prereqs/02-run.sh <<EOF
           #!/bin/bash -e
+          on_chroot << END
           /usr/bin/update-mydebs
           apt update -y
+          END
           EOF
-          chmod +x  00-prereqs/02-run-chroot.sh
+          chmod +x  00-prereqs/02-run.sh
           mkdir -p 01-installdash
           cat >  01-installdash/00-packages <<EOF
           aasdk
