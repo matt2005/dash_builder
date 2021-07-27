@@ -185,12 +185,6 @@ jobs:
           EOF
           chmod +x  00-prereqs/02-run.sh
           mkdir -p 01-installdash
-          cat >  01-installdash/00-packages <<EOF
-          aasdk
-          QtGStreamer
-          openauto
-          dash
-          EOF
           mkdir -p 02-dash-tweaks
           cat > 02-dash-tweaks/00-run-chroot.sh <<EOF
           #!/bin/bash -e
