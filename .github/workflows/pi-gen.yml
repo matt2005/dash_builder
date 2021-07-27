@@ -217,10 +217,10 @@ jobs:
           chmod +x 02-dash-tweaks/01-run-chroot.sh
           cat > 02-dash-tweaks/02-run-chroot.sh <<EOF
           #!/bin/bash -e
-          raspi-config nonint do_memory_split 128
+          #raspi-config nonint do_memory_split 128
           #raspi-config nonint do_gldriver G2
           # Console Autologin
-          raspi-config nonint do_boot_behaviour B2
+          #raspi-config nonint do_boot_behaviour B2
           EOF
           chmod +x 02-dash-tweaks/02-run-chroot.sh
           
