@@ -159,6 +159,7 @@ jobs:
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           mkdir -p /usr/local/mydebs/
           END
+          install -d "${ROOTFS_DIR}/usr/local/mydebs/"
           install -m 755 files/aasdk_2.1.0_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
           install -m 755 files/QtGStreamer-0.1.1-Linux.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
           install -m 755 files/openauto_2.1.0_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
