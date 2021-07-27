@@ -150,6 +150,7 @@ jobs:
           ls -hla  00-prereqs/files/
           cat >  00-prereqs/01-run.sh <<EOF
           #!/bin/bash -e
+          on_chroot <<END
           useradd ${FIRST_USER_NAME}
           mkdir -p /home/${FIRST_USER_NAME}/.ssh
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh
@@ -157,6 +158,7 @@ jobs:
           touch /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          END
           mkdir -p "${ROOTFS_DIR}/usr/local/mydebs/"
           install -m 755 files/aasdk_2.1.0_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
           install -m 755 files/QtGStreamer-0.1.1-Linux.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
@@ -176,7 +178,8 @@ jobs:
           cat >  00-prereqs/02-run.sh <<EOF
           #!/bin/bash -e
           on_chroot << END
-          /usr/bin/update-mydebs
+          cd /usr/local/mydebs
+          dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
           apt update -y
           END
           EOF
