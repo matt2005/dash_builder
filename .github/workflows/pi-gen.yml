@@ -157,33 +157,20 @@ jobs:
           touch /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
           chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
-          mkdir -p /usr/local/mydebs/
           END
-          install -d "${ROOTFS_DIR}/usr/local/mydebs/"
-          install -m 755 files/aasdk_2.1.0_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
-          install -m 755 files/QtGStreamer-0.1.1-Linux.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
-          install -m 755 files/openauto_2.1.0_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
-          install -m 755 files/dash_f825ff8_armhf.deb           "${ROOTFS_DIR}/usr/local/mydebs/"
-          cat > "${ROOTFS_DIR}/usr/bin/update-mydebs" <<EOCAT
-          #! /bin/bash
-          cd /usr/local/mydebs
-          dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-          EOCAT
-          chmod +x "${ROOTFS_DIR}/usr/bin/update-mydebs"
-          cat >"${ROOTFS_DIR}/etc/apt/sources.list.d/opendsh.list" <<EOCAT
-          deb file:/usr/local/mydebs ./
-          EOCAT
           EOF
           chmod +x  00-prereqs/01-run.sh
           cat >  00-prereqs/02-run.sh <<EOF
           #!/bin/bash -e
-          on_chroot << END
-          cd /usr/local/mydebs
-          dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-          apt update -y
+          on_chroot <<END
+          mkdir /usr/local/mydebs
+          cat >/etc/apt/sources.list.d/opendsh.list <<EOCAT
+          deb [trusted=yes] file:/usr/local/mydebs ./
+          EOCAT
+          apt update
           END
           EOF
-          chmod +x  00-prereqs/02-run.sh
+          chmod +x 00-prereqs/02-run.sh
           mkdir -p 01-installdash
           mkdir -p 02-dash-tweaks
           cat > 02-dash-tweaks/00-run-chroot.sh <<EOF
