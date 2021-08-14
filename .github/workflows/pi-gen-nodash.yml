@@ -31,7 +31,7 @@ jobs:
         name: Get the version
         id: get_version
         run: |
-          if [ -z "$var" ]
+          if [ -z "$version" ]
           then
                 version=$(date '+%Y%m%d')
                 echo ::set-output name=version::"0.${version}.1"
