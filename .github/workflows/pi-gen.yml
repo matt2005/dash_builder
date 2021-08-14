@@ -163,7 +163,7 @@ jobs:
           cat >  00-prereqs/02-run.sh <<EOF
           #!/bin/bash -e
           on_chroot <<END
-          mkdir /usr/local/mydebs
+          mkdir -p /usr/local/mydebs
           cat >/etc/apt/sources.list.d/opendsh.list <<EOCAT
           deb [trusted=yes] file:/usr/local/mydebs ./
           EOCAT
