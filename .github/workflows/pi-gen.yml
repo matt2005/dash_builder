@@ -238,6 +238,7 @@ jobs:
             ./pi-gen/deploy/*-opendsh.info
             ./pi-gen/deploy/*-opendsh.zip
             ./pi-gen/deploy/build.log
+            ./pi-gen/deploy/*.zip
   release:
     needs: [build]
     if: ${{ success() }}
