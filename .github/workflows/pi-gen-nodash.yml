@@ -30,18 +30,16 @@ jobs:
       - 
         name: Get the version
         id: get_version
-        if: ${{ github.event.workflow_dispatch }}
         run: |
-          echo ::set-output name=version::"${version}"
+          if [ -z "$var" ]
+          then
+                version=$(date '+%Y%m%d')
+                echo ::set-output name=version::"0.${version}.1"
+          else
+                echo ::set-output name=version::"${version}"
+          fi
         env:
           version: ${{ github.event.inputs.version }}
-      - 
-        name: Get the version
-        id: get_version
-        if: ${{ github.event.push }}
-        run: |
-          version=$(date '+%Y%m%d')
-          echo ::set-output name=version::"0.${version}.1"
       - 
         name: pi-gen config
         id: pi-gen_config
