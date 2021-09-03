@@ -138,7 +138,40 @@ jobs:
           libqt5websockets5-dev
           dpkg-dev
           EOF
-          
+          cat > 00-prereqs/00-run.sh <<EOF
+          #!/bin/bash -e
+          on_chroot << END
+          echo '>>> Set Debian frontend to Noninteractive'
+          echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+          export DEBIAN_FRONTEND=noninteractive
+          echo '>>> Update CA certs for a secure connection to GitHub'
+          update-ca-certificates -f
+          END
+          EOF
+          chmod +x 00-prereqs/00-run.sh
+          cat >  00-prereqs/01-run.sh <<EOF
+          #!/bin/bash -e
+          on_chroot <<END
+          mkdir -p /home/${FIRST_USER_NAME}/.ssh
+          chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh
+          chmod 700 /home/${FIRST_USER_NAME}/.ssh
+          touch /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          chown ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          chmod 644 /home/${FIRST_USER_NAME}/.ssh/authorized_keys
+          END
+          EOF
+          chmod +x  00-prereqs/01-run.sh
+          cat >  00-prereqs/02-run.sh <<EOF
+          #!/bin/bash -e
+          on_chroot <<END
+          wget -qO - https://matt2005.github.io/packagerepo/PUBLIC.KEY | apt-key add -
+          cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
+          deb http://matt2005.github.io/packagerepo/debian buster main
+          EOCAT
+          apt update
+          END
+          EOF
+          chmod +x 00-prereqs/02-run.sh          
         working-directory: ./pi-gen
         env:
           version: ${{ steps.get_version.outputs.version }}
