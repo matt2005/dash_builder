@@ -133,21 +133,9 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           echo '>>> Update CA certs for a secure connection to GitHub'
           update-ca-certificates -f
-          echo '>>> Download latest Dash Installer'
-          git clone --depth=1 https://github.com/openDsh/dash.git /home/${FIRST_USER_NAME}/dash
-          chmod -R 775 /home/${FIRST_USER_NAME}/dash
-          chown -R ${FIRST_USER_NAME}:${FIRST_USER_NAME} /home/${FIRST_USER_NAME}/dash
           END
           EOF
           chmod +x 00-prereqs/00-run.sh
-          mkdir -p  00-prereqs/files
-          cp ../../packages/aasdk_2.1.0_armhf.deb  00-prereqs/files/
-          cp ../../packages/QtGStreamer-0.1.1-Linux.deb  00-prereqs/files/
-          cp ../../packages/aasdk_2.1.0_armhf.deb  00-prereqs/files/
-          cp ../../packages/openauto_2.1.0_armhf.deb  00-prereqs/files/
-          cp ../../packages/dash_f825ff8_armhf.deb  00-prereqs/files/
-          ls -hla ../../packages/
-          ls -hla  00-prereqs/files/
           cat >  00-prereqs/01-run.sh <<EOF
           #!/bin/bash -e
           on_chroot <<END
@@ -163,15 +151,20 @@ jobs:
           cat >  00-prereqs/02-run.sh <<EOF
           #!/bin/bash -e
           on_chroot <<END
-          mkdir -p /usr/local/mydebs
-          cat >/etc/apt/sources.list.d/opendsh.list <<EOCAT
-          deb [trusted=yes] file:/usr/local/mydebs ./
+          wget -qO - https://matt2005.github.io/packagerepo/PUBLIC.KEY | apt-key add -
+          cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
+          deb http://matt2005.github.io/packagerepo/debian buster main
           EOCAT
           apt update
           END
           EOF
           chmod +x 00-prereqs/02-run.sh
           mkdir -p 01-installdash
+          cat > 01-installdash/01-packages <<EOF
+          aasdk
+          openauto
+          opendsh
+          EOF
           mkdir -p 02-dash-tweaks
           cat > 02-dash-tweaks/00-run-chroot.sh <<EOF
           #!/bin/bash -e
