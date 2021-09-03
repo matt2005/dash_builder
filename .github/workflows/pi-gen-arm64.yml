@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: RPi-Distro/pi-gen
-          ref: master
+          ref: arm64
           path: pi-gen
 #      -
 #        name: Set up QEMU
@@ -57,7 +57,7 @@ jobs:
         id: pi-gen_config
         run: |
           cat > config <<EOF
-          IMG_NAME='${version}-armhf'
+          IMG_NAME='${version}-arm64'
           FIRST_USER_NAME='${FIRST_USER_NAME}'
           FIRST_USER_PASS='${FIRST_USER_NAME}'
           TARGET_HOSTNAME='opendsh'

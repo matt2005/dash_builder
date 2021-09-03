@@ -38,7 +38,7 @@ jobs:
         id: pi-gen_config
         run: |
           cat > config <<EOF
-          IMG_NAME='${version}'
+          IMG_NAME='${version}-armhf'
           FIRST_USER_NAME='${FIRST_USER_NAME}'
           FIRST_USER_PASS='${FIRST_USER_NAME}'
           TARGET_HOSTNAME='opendsh'
