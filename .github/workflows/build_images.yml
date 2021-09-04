@@ -2,8 +2,6 @@ name: Build Images
 
 on:
   push:
-    tags:
-      - "*"
   workflow_dispatch:
     inputs:
       version:
