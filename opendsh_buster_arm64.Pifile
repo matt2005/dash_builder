@@ -1,7 +1,7 @@
 FROM base_buster_arm64.img
 
 RUN apt install wget -y
-RUN wget -qO - https://matt2005.github.io/packagerepo/PUBLIC.KEY && apt-key add PUBLIC.KEY && rm PUBLIC.KEY
+RUN wget -qO - https://matt2005.github.io/packagerepo/PUBLIC.KEY | apt-key add -
 RUN cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
 deb http://matt2005.github.io/packagerepo/debian buster main
 EOCAT
