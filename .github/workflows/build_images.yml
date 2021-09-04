@@ -57,17 +57,7 @@ jobs:
     steps:
       - 
         name: Checkout repository
-        uses: actions/checkout@v1
-      - 
-        name: Create Base Image
-        uses: Nature40/pimod@v0.2.1
-        with:
-          pifile: ${{ matrix.config.basefile }}.Pifile
-      - 
-        name: Create Final Image
-        uses: Nature40/pimod@v0.2.1
-        with:
-          pifile: ${{ matrix.config.opendshfile }}.Pifile
+        uses: actions/checkout@
       - 
         name: Get the version
         id: get_version
@@ -88,6 +78,16 @@ jobs:
           arch: ${{ matrix.config.arch }}
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
+      - 
+        name: Create Base Image
+        uses: Nature40/pimod@v0.2.1
+        with:
+          pifile: ${{ matrix.config.basefile }}.Pifile
+      - 
+        name: Create Final Image
+        uses: Nature40/pimod@v0.2.1
+        with:
+          pifile: ${{ matrix.config.opendshfile }}.Pifile
       - 
         name: Rename Image
         run: mv ${{ matrix.config.opendshfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
