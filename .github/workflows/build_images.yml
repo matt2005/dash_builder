@@ -15,42 +15,61 @@ jobs:
           "ubuntu-latest",
           #"macos-10.15",
         ]
-        arch:
-          - armhf
-          - arm64
-    name: 'Build:  ${{ matrix.arch }}'
+        config:
+          - {
+              name: "Debian Buster armhf",
+              basefile: "base_buster_armhf",
+              opendshfile: "opendsh_buster_armhf",
+              arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
+          - {
+              name: "Debian Buster arm64",
+              basepifile: "base_buster_arm64",
+              opendshpifile: "opendsh_buster_arm64",
+              arch: "arm64",
+              osname: "buster",
+              ostype: "Debian"
+            }
+    name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
 
-      - name: Run Base Pifile
+      - name: Create Base Image
         uses: Nature40/pimod@v0.2.1
         with:
-          pifile: base_${{ matrix.arch }}.Pifile
-      - name: Run OpenDsh Pifile
+          pifile: ${{ matrix.config.basepifile }}.Pifile
+      - name: Create Final Image
         uses: Nature40/pimod@v0.2.1
         with:
-          pifile: opendsh_${{ matrix.arch }}.Pifile
+          pifile: ${{ matrix.config.opendshpifile }}.Pifile
       - 
         name: Get the version
         id: get_version
         run: |
+          if [ -z "$ostype" ]
+          then 
+                osname=${ostype}_${osname}
+          fi
           if [ -z "$version" ]
           then
                 version=$(date '+%Y%m%d')
-                echo ::set-output name=version::"${version}-${codename}-${arch}"
+                echo ::set-output name=version::"${version}-${osname}-${arch}"
           else
                 echo ::set-output name=version::"${version}"
           fi
         env:
           version: ${{ github.event.inputs.version }}
-          arch: ${{ matrix.arch }}
-          codename: buster
-      - name: Rename opendsh-${{ matrix.arch }} Image
-        run: mv opendsh-${{ matrix.arch }}.img opendsh-${{ steps.get_version.outputs.version }}.img
+          arch: ${{ matrix.config.arch }}
+          ostype: ${{ matrix.config.ostype }}
+          osname: ${{ matrix.config.osname }}
+      - name: Rename Image
+        run: mv ${{ matrix.config.opendshpifile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
         env:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
-      - name: Package opendsh-${{ matrix.arch }}.zip
+      - name: Package zip
         run: zip opendsh-${{ steps.get_version.outputs.version }}.zip opendsh-${{ steps.get_version.outputs.version }}.img
         env:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
@@ -65,7 +84,7 @@ jobs:
           release_name: Release ${{ env.RELEASE_VERSION }}
           draft: true
           prerelease: true
-      - name: Upload opendsh-${{ matrix.arch }}.zip to release
+      - name: Upload zip to release
         id: upload_batrack_zip
         uses: actions/upload-release-asset@v1.0.1
         env:
