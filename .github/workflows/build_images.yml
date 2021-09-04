@@ -62,7 +62,7 @@ jobs:
         name: Get the version
         id: get_version
         run: |
-          if [ -z "$ostype" ]
+          if [ -n "$ostype" ]
           then 
                 osname=${ostype}_${osname}
           fi
@@ -150,7 +150,7 @@ jobs:
         name: Get the version
         id: get_version
         run: |
-          if [ -z "$ostype" ]
+          if [ -n "$ostype" ]
           then 
                 osname=${ostype}_${osname}
           fi
