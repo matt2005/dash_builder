@@ -84,7 +84,7 @@ jobs:
                 echo ::set-output name=version::"${version}"
           fi
         env:
-          version: ${{ steps.version.outputs.version }}
+          version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
@@ -115,10 +115,9 @@ jobs:
         uses: actions/create-release@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          release_name: Release ${{ steps.version.outputs.version }}
+          tag_name: ${{needs.version.outputs.version }}
+          release_name: Release ${{needs.version.outputs.version }}
           draft: true
           prerelease: true
 # Upload release artifacts
@@ -168,11 +167,10 @@ jobs:
                 echo ::set-output name=version::"${version}"
           fi
         env:
-          version: ${{ steps.version.outputs.version }}
+          version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
-      
       - 
         name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -180,13 +178,13 @@ jobs:
           name: ${{ steps.get_version.outputs.version }}
       - 
         name: Upload zip to release
-        id: upload_batrack_zip
+        id: upload_zip
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
         with:
-          upload_url: ${{ steps.release.outputs.release_upload_url }}
+          upload_url: ${{needs.release.outputs.release_upload_url}}
           asset_path: opendsh-${{ steps.get_version.outputs.version }}.zip
           asset_name: opendsh-${{ steps.get_version.outputs.version }}.zip
           asset_content_type: application/zip
