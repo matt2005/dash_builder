@@ -124,7 +124,6 @@ jobs:
   upload:
     needs: [ version, build, release ]
     runs-on: ${{ matrix.host }}
-    name: 'Upload release:  ${{ matrix.config.name }}'
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -150,6 +149,8 @@ jobs:
               osname: "buster",
               ostype: "Debian"
             }
+
+    name: 'Upload release:  ${{ matrix.config.name }}'
     steps:
       - 
         name: Get the version
