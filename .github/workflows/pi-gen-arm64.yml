@@ -91,6 +91,7 @@ jobs:
           mkdir -p 00-prereqs
           cat > 00-prereqs/00-packages <<EOF
           git
+          libgcc1
           EOF
           cat > 00-prereqs/00-packages-nr <<EOF
           xserver-xorg-core
