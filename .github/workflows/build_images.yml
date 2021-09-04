@@ -66,13 +66,7 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          if [ -z "$version" ]
-          then
-                version=$(date '+%Y%m%d')
-                echo ::set-output name=version::"${version}-${osname}-${arch}"
-          else
-                echo ::set-output name=version::"${version}"
-          fi
+          echo ::set-output name=version::"${version}-${osname}-${arch}"
         env:
           version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
@@ -160,13 +154,7 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          if [ -z "$version" ]
-          then
-                version=$(date '+%Y%m%d')
-                echo ::set-output name=version::"${version}-${osname}-${arch}"
-          else
-                echo ::set-output name=version::"${version}"
-          fi
+          echo ::set-output name=version::"${version}-${osname}-${arch}"
         env:
           version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
