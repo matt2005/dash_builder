@@ -26,8 +26,8 @@ jobs:
             }
           - {
               name: "Debian Buster arm64",
-              basepifile: "base_buster_arm64",
-              opendshpifile: "opendsh_buster_arm64",
+              basefile: "base_buster_arm64",
+              opendshfile: "opendsh_buster_arm64",
               arch: "arm64",
               osname: "buster",
               ostype: "Debian"
@@ -40,11 +40,11 @@ jobs:
       - name: Create Base Image
         uses: Nature40/pimod@v0.2.1
         with:
-          pifile: ${{ matrix.config.basepifile }}.Pifile
+          pifile: ${{ matrix.config.basefile }}.Pifile
       - name: Create Final Image
         uses: Nature40/pimod@v0.2.1
         with:
-          pifile: ${{ matrix.config.opendshpifile }}.Pifile
+          pifile: ${{ matrix.config.opendshfile }}.Pifile
       - 
         name: Get the version
         id: get_version
@@ -66,7 +66,7 @@ jobs:
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
       - name: Rename Image
-        run: mv ${{ matrix.config.opendshpifile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
+        run: mv ${{ matrix.config.opendshfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
         env:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
       - name: Package zip
