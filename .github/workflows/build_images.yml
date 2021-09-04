@@ -1,0 +1,80 @@
+name: Build Images
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+jobs:
+  build:
+    runs-on: ${{ matrix.host }}
+    strategy:
+      matrix:
+        host: [
+          "ubuntu-latest",
+          #"macos-10.15",
+        ]
+        arch:
+          - armhf
+          - arm64
+    name: 'Build:  ${{ matrix.arch }}'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+
+      - name: Run Base Pifile
+        uses: Nature40/pimod@v0.2.1
+        with:
+          pifile: base_${{ matrix.arch }}.Pifile
+      - name: Run OpenDsh Pifile
+        uses: Nature40/pimod@v0.2.1
+        with:
+          pifile: opendsh_${{ matrix.arch }}.Pifile
+      - 
+        name: Get the version
+        id: get_version
+        run: |
+          if [ -z "$version" ]
+          then
+                version=$(date '+%Y%m%d')
+                echo ::set-output name=version::"0.${version}.1"
+          else
+                echo ::set-output name=version::"${version}"
+          fi
+        env:
+          version: ${{ github.event.inputs.version }}
+      - name: Rename OpenDsh-${{ matrix.arch }} Image
+        run: mv OpenDsh.img OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.img
+        env:
+          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+      - name: Package OpenDsh-${{ matrix.arch }}.zip
+        run: zip OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.img
+        env:
+          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: Release ${{ env.RELEASE_VERSION }}
+          draft: true
+          prerelease: true
+      - name: Upload OpenDsh-${{ matrix.arch }}.zip to release
+        id: upload_batrack_zip
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip
+          asset_name: OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip
+          asset_content_type: application/zip
