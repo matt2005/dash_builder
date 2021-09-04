@@ -146,7 +146,7 @@ jobs:
               osname: "buster",
               ostype: "Debian"
             }
-      steps:
+    steps:
       - 
         name: Get the version
         id: get_version
