@@ -91,17 +91,21 @@ jobs:
       - 
         name: Rename Image
         run: mv ${{ matrix.config.opendshfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
-        env:
-          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
       - 
         name: Package zip
         run: zip opendsh-${{ steps.get_version.outputs.version }}.zip opendsh-${{ steps.get_version.outputs.version }}.img
-        env:
-          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+      - 
+        name: Upload build artifacts 
+        id: upload_deploy
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.get_version.outputs.version }}
+          path: opendsh-${{ steps.get_version.outputs.version }}.zip
 # Create Release
   release:
     runs-on: ubuntu-latest
     needs: [ version, build ]
+    name: 'Create release'
     outputs:
       release_upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
     steps:
@@ -121,6 +125,7 @@ jobs:
   upload:
     needs: [ version, build, release ]
     runs-on: ${{ matrix.host }}
+    name: 'Upload release:  ${{ matrix.config.name }}'
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -167,6 +172,12 @@ jobs:
           arch: ${{ matrix.config.arch }}
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
+      
+      - 
+        name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ steps.get_version.outputs.version }}
       - 
         name: Upload zip to release
         id: upload_batrack_zip
