@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
-        with:
-          submodules: recursive
 
       - name: Run Base Pifile
         uses: Nature40/pimod@v0.2.1
@@ -37,21 +35,23 @@ jobs:
         name: Get the version
         id: get_version
         run: |
+          codename=grep "VERSION=" /etc/os-release |awk -F= {' print $2'}|sed s/\"//g |sed s/[0-9]//g | sed s/\)$//g |sed s/\(//g
           if [ -z "$version" ]
           then
                 version=$(date '+%Y%m%d')
-                echo ::set-output name=version::"0.${version}.1"
+                echo ::set-output name=version::"${version}-${codename}-${arch}"
           else
                 echo ::set-output name=version::"${version}"
           fi
         env:
           version: ${{ github.event.inputs.version }}
-      - name: Rename OpenDsh-${{ matrix.arch }} Image
-        run: mv OpenDsh.img OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.img
+          arch: ${{ matrix.arch }}
+      - name: Rename opendsh-${{ matrix.arch }} Image
+        run: mv opendsh.img opendsh-${{ steps.get_version.outputs.version }}.img
         env:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
-      - name: Package OpenDsh-${{ matrix.arch }}.zip
-        run: zip OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.img
+      - name: Package opendsh-${{ matrix.arch }}.zip
+        run: zip opendsh-${{ steps.get_version.outputs.version }}.zip opendsh-${{ steps.get_version.outputs.version }}.img
         env:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
       - name: Create GitHub release
@@ -65,7 +65,7 @@ jobs:
           release_name: Release ${{ env.RELEASE_VERSION }}
           draft: true
           prerelease: true
-      - name: Upload OpenDsh-${{ matrix.arch }}.zip to release
+      - name: Upload opendsh-${{ matrix.arch }}.zip to release
         id: upload_batrack_zip
         uses: actions/upload-release-asset@v1.0.1
         env:
@@ -73,6 +73,6 @@ jobs:
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip
-          asset_name: OpenDsh-${{ matrix.arch }}-${{ env.RELEASE_VERSION }}.zip
+          asset_path: opendsh-${{ steps.get_version.outputs.version }}.zip
+          asset_name: opendsh-${{ steps.get_version.outputs.version }}.zip
           asset_content_type: application/zip
