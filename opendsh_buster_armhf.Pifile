@@ -4,6 +4,6 @@ RUN apt -y install wget software-properties-common dirmngr apt-transport-https l
 RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 RUN apt-key add PUBLIC.KEY
 RUN rm PUBLIC.KEY 
-RUN add-apt-repository 'deb http://matt2005.github.io/packagerepo/debian buster main'
+RUN echo "deb http://matt2005.github.io/packagerepo/apt/debian buster main" > /etc/apt/sources.list.d/matt2005.list
 RUN apt update && apt upgrade -y
 RUN apt install aasdk qtgstreamer openauto opendsh -y
