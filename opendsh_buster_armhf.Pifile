@@ -4,8 +4,8 @@ RUN apt install wget ca-certificates -y
 RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 RUN apt-key add PUBLIC.KEY
 RUN rm PUBLIC.KEY 
-RUN cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
+RUN cat >/etc/apt/sources.list.d/matt2005.list <<EOF
 deb http://matt2005.github.io/packagerepo/debian buster main
-EOCAT
+EOF
 RUN apt update && apt upgrade -y
 RUN apt install aasdk qtgstreamer openauto opendsh -y
