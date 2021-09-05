@@ -5,4 +5,4 @@ RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY
 RUN apt-key add PUBLIC.KEY
 RUN rm PUBLIC.KEY 
 RUN echo "deb http://matt2005.github.io/packagerepo/apt/debian buster main" > /etc/apt/sources.list.d/matt2005.list
-RUN apt update && apt upgrade -y
+# RUN apt update && apt upgrade -y
