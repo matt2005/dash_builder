@@ -1,7 +1,7 @@
 FROM base_buster_armhf.img
 
 RUN apt install wget ca-certificates -y
-RUN wget -q -v -O - https://matt2005.github.io/packagerepo/PUBLIC.KEY 
+RUN wget -v -O - https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 RUN sudo apt-key add PUBLIC.KEY
 RUN rm PUBLIC.KEY 
 RUN cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
