@@ -7,4 +7,5 @@ RUN rm PUBLIC.KEY
 RUN cat >/etc/apt/sources.list.d/matt2005.list <<EOCAT
 deb http://matt2005.github.io/packagerepo/debian buster main
 EOCAT
-RUN apt update
+RUN apt update && apt upgrade -y
+RUN apt install aasdk qtgstreamer openauto opendsh -y
