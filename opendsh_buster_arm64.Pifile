@@ -5,7 +5,7 @@ RUN apt -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-i
 RUN apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
 RUN useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl passwd -1 opendsh)" opendsh
-RUN cd /home/opendsh && git clone https://github.com/openDsh/dash.git opendsh && chown opendsh:opendsh /home/opendsh/opendsh
+RUN cd /home/opendsh && git clone https://github.com/openDsh/dash.git opendsh
 RUN bash -c "/home/opendsh/opendsh/install.sh --deps"
 RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 RUN apt-key add PUBLIC.KEY
