@@ -1,14 +1,18 @@
 FROM base_buster_armhf.img
 
-RUN apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
-RUN apt -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils
-RUN apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
+RUN <<EOF
+apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
+apt -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils
+apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
-RUN useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl passwd -1 opendsh)" opendsh
-RUN bash -c "cd /home/opendsh && git clone https://github.com/openDsh/dash.git -b develop"
-RUN bash -c "/home/opendsh/opendsh/install.sh --deps"
-RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
-RUN apt-key add PUBLIC.KEY
-RUN rm PUBLIC.KEY 
-RUN echo "deb http://matt2005.github.io/packagerepo/apt/debian buster main" > /etc/apt/sources.list.d/matt2005.list
+useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl passwd -1 opendsh)" opendsh
+bash -c "cd /home/opendsh && git clone https://github.com/openDsh/dash.git -b develop"
+bash -c "/home/opendsh/opendsh/install.sh --deps"
+EOF
+RUN <<EOF
+wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
+apt-key add PUBLIC.KEY
+rm PUBLIC.KEY 
+echo "deb http://matt2005.github.io/packagerepo/apt/debian buster main" > /etc/apt/sources.list.d/matt2005.list
+EOF
 # RUN apt update && apt upgrade -y
