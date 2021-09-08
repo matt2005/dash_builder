@@ -74,12 +74,12 @@ jobs:
           osname: ${{ matrix.config.osname }}
       - 
         name: Create Base Image
-        uses: Nature40/pimod@v0.2.1
+        uses: Nature40/pimod@v0.2.2
         with:
           pifile: ${{ matrix.config.basefile }}.Pifile
       - 
         name: Create Final Image
-        uses: Nature40/pimod@v0.2.1
+        uses: Nature40/pimod@v0.2.2
         with:
           pifile: ${{ matrix.config.opendshfile }}.Pifile
       - 
@@ -168,7 +168,7 @@ jobs:
       - 
         name: Upload zip to release
         id: upload_zip
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
