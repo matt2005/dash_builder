@@ -13,7 +13,7 @@ RUN <<EOF
 wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 apt-key add PUBLIC.KEY
 rm PUBLIC.KEY 
-bash -c echo 'deb http://matt2005.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/matt2005.list"
+bash -c "echo 'deb http://matt2005.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/matt2005.list"
 apt update
 apt upgrade -y
 apt -y install aasdk openauto qtgstreamer opendsh
