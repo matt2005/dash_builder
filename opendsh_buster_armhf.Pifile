@@ -1,9 +1,14 @@
 FROM base_buster_armhf.img
 
-RUN apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+RUN apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
+RUN apt -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils
+RUN apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
+# https://github.com/openDsh/dash/issues/63#issuecomment-821121874
+RUN useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl passwd -1 opendsh)" opendsh
+RUN cd /home/opendsh && git clone https://github.com/openDsh/dash.git opendsh && chown opendsh:opendsh /home/opendsh/opendsh
+RUN bash -c "/home/opendsh/opendsh/install.sh --deps"
 RUN wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 RUN apt-key add PUBLIC.KEY
 RUN rm PUBLIC.KEY 
 RUN echo "deb http://matt2005.github.io/packagerepo/apt/debian buster main" > /etc/apt/sources.list.d/matt2005.list
 # RUN apt update && apt upgrade -y
-# RUN apt install aasdk qtgstreamer openauto opendsh -y
