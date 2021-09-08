@@ -7,7 +7,7 @@ apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbt
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
 useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl passwd -1 opendsh)" opendsh
 bash -c "cd /home/opendsh && git clone https://github.com/openDsh/dash.git -b develop"
-bash -c "/home/opendsh/opendsh/install.sh --deps"
+bash -c "/home/opendsh/dash/install.sh --deps"
 EOF
 RUN <<EOF
 wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
