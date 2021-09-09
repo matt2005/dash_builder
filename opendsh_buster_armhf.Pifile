@@ -19,3 +19,36 @@ apt update
 apt upgrade -y
 apt -y install aasdk openauto qtgstreamer opendsh
 EOF
+# Set autologin console
+RUN <<EOF
+systemctl set-default multi-user.target
+ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
+EOCAT
+sudo bash -c "cat > /home/pi/.xinitrc <<EOCAT
+#!/usr/bin/env sh
+xset -dpms
+xset s off
+xset s noblank
+
+while [ true ]; do
+  sh /home/pi/run.sh
+done
+EOCAT
+"
+
+sudo bash -c "cat > /home/pi/run.sh <<EOCAT
+#!/usr/bin/env sh
+
+/usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
+
+sleep 1
+
+EOCAT
+"
+sudo chmod +x ~/run.sh
+sudo chown pi:pi ~/run.sh 
+EOF
