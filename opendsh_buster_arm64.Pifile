@@ -13,11 +13,10 @@ RUN <<EOF
 wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 apt-key add PUBLIC.KEY
 rm PUBLIC.KEY 
-bash -c "echo 'deb https://matt2005.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/matt2005.list"
-#bash -c "echo 'deb https://apt.fury.io/matt2005/ /' > /etc/apt/sources.list.d/matt2005.list"
+bash -c "echo 'deb [ arch=arm64 ] https://matt2005.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/matt2005.list"
 apt update
 apt upgrade -y
-apt -y install aasdk openauto qtgstreamer
+apt -y install aasdk openautoopendsh qtgstreamer opendsh
 EOF
 # Set autologin console
 RUN <<EOF
