@@ -50,4 +50,7 @@ EOCAT
 "
 sudo chmod +x /home/pi/rundash.sh
 sudo chown pi:pi /home/pi/rundash.sh 
+echo 'if [ "$(tty)" = "/dev/tty1" ]; then
+  startx
+fi' >> /home/pi/.bashrc
 EOF
