@@ -17,7 +17,7 @@ bash -c "echo 'deb https://matt2005.github.io/packagerepo/apt/debian buster main
 #bash -c "echo 'deb https://apt.fury.io/matt2005/ /' > /etc/apt/sources.list.d/matt2005.list"
 apt update
 apt upgrade -y
-apt -y install aasdk openauto qtgstreamer opendsh
+apt -y install aasdk openauto qtgstreamer
 EOF
 # Set autologin console
 RUN <<EOF
