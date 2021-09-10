@@ -35,12 +35,12 @@ xset s off
 xset s noblank
 
 while [ true ]; do
-  sh /home/pi/run.sh
+  sh /home/pi/rundash.sh
 done
 EOCAT
 "
 
-sudo bash -c "cat > /home/pi/run.sh <<EOCAT
+sudo bash -c "cat > /home/pi/rundash.sh <<EOCAT
 #!/usr/bin/env sh
 
 /usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
@@ -49,6 +49,6 @@ sleep 1
 
 EOCAT
 "
-sudo chmod +x ~/run.sh
-sudo chown pi:pi ~/run.sh 
+sudo chmod +x /home/pi/rundash.sh
+sudo chown pi:pi /home/pi/rundash.sh 
 EOF
