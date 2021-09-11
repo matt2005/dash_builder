@@ -29,7 +29,7 @@ cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
 ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOCAT
-sudo bash -c "cat > /home/pi/.xinitrc <<EOCAT
+bash -c "cat > /home/pi/.xinitrc <<EOCAT
 #!/usr/bin/env sh
 xset -dpms
 xset s off
@@ -41,7 +41,7 @@ done
 EOCAT
 "
 
-sudo bash -c "cat > /home/pi/rundash.sh <<EOCAT
+bash -c "cat > /home/pi/rundash.sh <<EOCAT
 #!/usr/bin/env sh
 
 /usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
@@ -50,17 +50,17 @@ sleep 1
 
 EOCAT
 "
-sudo chmod +x /home/pi/rundash.sh
-sudo chown pi:pi /home/pi/rundash.sh 
+chmod +x /home/pi/rundash.sh
+chown pi:pi /home/pi/rundash.sh 
 EOF
 
 RUN <<EOF
-sudo bash -c "cat >> /home/pi/.bashrc <<EOCAT
+bash -c 'cat >> /home/pi/.bashrc <<EOCAT
 
 if [ "$(tty)" = "/dev/tty1" ]; then
   startx
 fi
 EOCAT
-"
+'
 EOF
 
