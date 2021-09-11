@@ -10,6 +10,7 @@ useradd -rm -d /home/opendsh -s /bin/bash -g root -G sudo -u 1001 -p "$(openssl 
 bash -c "cd /home/opendsh && git clone https://github.com/openDsh/dash.git -b develop"
 bash -c "/home/opendsh/dash/install.sh --deps"
 EOF
+
 RUN <<EOF
 wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
 apt-key add PUBLIC.KEY
@@ -18,6 +19,9 @@ bash -c "echo 'deb [ arch=armhf ] https://matt2005.github.io/packagerepo/apt/deb
 apt update
 apt upgrade -y
 apt -y install aasdk openautoopendsh qtgstreamer opendsh
+EOF
+
+RUN <<EOF
 systemctl set-default multi-user.target
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
 cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
@@ -48,8 +52,15 @@ EOCAT
 "
 sudo chmod +x /home/pi/rundash.sh
 sudo chown pi:pi /home/pi/rundash.sh 
-echo 'if [ "$(tty)" = "/dev/tty1" ]; then
+EOF
+
+RUN <<EOF
+sudo bash -c "cat >> /home/pi/.bashrc <<EOCAT
+
+if [ "$(tty)" = "/dev/tty1" ]; then
   startx
-fi' >> /home/pi/.bashrc
+fi
+EOCAT
+"
 EOF
 
