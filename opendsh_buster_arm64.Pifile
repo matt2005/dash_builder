@@ -18,7 +18,7 @@ bash -c "echo 'deb [ arch=arm64 ] https://matt2005.github.io/packagerepo/apt/deb
 apt update
 apt upgrade -y
 apt -y install aasdk openautoopendsh qtgstreamer opendsh
-chown pi:pi /usr/local/opendsh/bin/dash
+chmod +x /usr/local/opendsh/bin/dash
 EOF
 
 RUN <<EOF
@@ -44,7 +44,7 @@ EOCAT
 bash -c "cat > /home/pi/rundash.sh <<EOCAT
 #!/usr/bin/env sh
 
-/usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
+GST_DEBUG=3 /usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
 
 sleep 1
 
