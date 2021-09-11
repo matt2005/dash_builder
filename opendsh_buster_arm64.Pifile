@@ -1,5 +1,4 @@
 FROM base_buster_arm64.img
-PUMP 1000M
 
 RUN <<EOF
 apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
