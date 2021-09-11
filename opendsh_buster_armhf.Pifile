@@ -21,6 +21,10 @@ apt -y install aasdk openautoopendsh qtgstreamer opendsh
 chmod +x /usr/local/opendsh/bin/dash
 EOF
 
+INSTALL "scripts/.xinitrc" "/home/pi/"
+INSTALL "scripts/rundash.sh" "/home/pi/"
+INSTALL "scripts/.xinitrc" "/home/pi/"
+
 RUN <<EOF
 systemctl set-default multi-user.target
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
@@ -29,44 +33,20 @@ cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
 ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOCAT
-bash -c "cat > /home/pi/.xinitrc <<EOCAT
-#!/usr/bin/env sh
-xset -dpms
-xset s off
-xset s noblank
-
-while [ true ]; do
-  sh /home/pi/rundash.sh
-done
-EOCAT
-"
-
-bash -c "cat > /home/pi/rundash.sh <<EOCAT
-#!/usr/bin/env sh
-
-GST_DEBUG=3 /usr/local/opendsh/bin/dash >> /home/pi/dash.log 2>&1
-
-sleep 1
-
-EOCAT
-"
+chown pi:pi /home/pi/.xinitrc
 chmod +x /home/pi/rundash.sh
 chown pi:pi /home/pi/rundash.sh 
 EOF
 
 RUN <<EOF
-bash -c 'cat >> /home/pi/.bashrc <<EOCAT
+bash -c "cat >> /home/pi/.bashrc <<EOCAT
 
-if [ "\$(tty)" = "/dev/tty1" ]; then
+if [ \"\$(tty)\" = \"/dev/tty1\" ]; then
   startx
 fi
 EOCAT
-'
+"
 EOF
+
 # Add udev rules
-RUN <<EOF
-bash -c 'cat > /etc/udev/rules.d/51-dashusb.rules <<EOCAT
-"SUBSYSTEM==\"usb\", ATTR{idVendor}==\"*\", ATTR{idProduct}==\"*\", MODE=\"0660\", GROUP=\"plugdev\""
-EOCAT
-'
-EOF
+INSTALL "scripts/51-dashusb.rules" "/etc/udev/rules.d/"
