@@ -55,11 +55,11 @@ chown pi:pi /home/pi/rundash.sh
 EOF
 
 RUN <<EOF
-cat >> /home/pi/.bashrc <<EOCAT
+bash -c "cat >> /home/pi/.bashrc <<EOCAT
 
-if [ "$(tty)" = "/dev/tty1" ]; then
+if [ "\$(tty)" = "/dev/tty1" ]; then
   startx
 fi
 EOCAT
-
+"
 EOF
