@@ -62,3 +62,10 @@ fi
 EOCAT
 '
 EOF
+# Add udev rules
+RUN <<EOF
+bash -c 'cat > /etc/udev/rules.d/51-dashusb.rules <<EOCAT
+"SUBSYSTEM==\"usb\", ATTR{idVendor}==\"*\", ATTR{idProduct}==\"*\", MODE=\"0660\", GROUP=\"plugdev\""
+EOCAT
+'
+EOF
