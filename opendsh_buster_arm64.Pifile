@@ -21,9 +21,10 @@ apt -y install aasdk openautoopendsh qtgstreamer opendsh
 chmod +x /usr/local/opendsh/bin/dash
 EOF
 
-INSTALL "scripts/.xinitrc" "/home/pi/"
+#INSTALL "scripts/.xinitrc" "/home/pi/"
 INSTALL "scripts/rundash.sh" "/home/pi/"
 INSTALL "scripts/.xinitrc" "/home/pi/"
+INSTALL "scripts/dash.service" "/etc/systemd/system/"
 
 RUN <<EOF
 systemctl set-default multi-user.target
