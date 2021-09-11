@@ -1,4 +1,5 @@
 FROM base_buster_arm64.img
+PUMP 1000M
 
 RUN <<EOF
 apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
@@ -17,9 +18,6 @@ bash -c "echo 'deb [ arch=arm64 ] https://matt2005.github.io/packagerepo/apt/deb
 apt update
 apt upgrade -y
 apt -y install aasdk openautoopendsh qtgstreamer opendsh
-EOF
-# Set autologin console
-RUN <<EOF
 systemctl set-default multi-user.target
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
 cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
