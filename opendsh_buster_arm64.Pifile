@@ -53,13 +53,3 @@ EOCAT
 chmod +x /home/pi/rundash.sh
 chown pi:pi /home/pi/rundash.sh 
 EOF
-
-RUN <<EOF
-bash -c 'cat >> /home/pi/.bashrc <<EOCAT
-
-if [ "$(tty)" = "/dev/tty1" ]; then
-  startx
-fi
-EOCAT
-'
-EOF
