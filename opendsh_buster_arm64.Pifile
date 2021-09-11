@@ -21,22 +21,18 @@ apt -y install aasdk openautoopendsh qtgstreamer opendsh
 chmod +x /usr/local/opendsh/bin/dash
 EOF
 
-#INSTALL "scripts/.xinitrc" "/home/pi/"
-INSTALL "scripts/rundash.sh" "/home/pi/"
-INSTALL "scripts/.xinitrc" "/home/pi/"
 INSTALL "scripts/dash.service" "/etc/systemd/system/"
 
 RUN <<EOF
-systemctl set-default multi-user.target
+apt -y install lightdm
+systemctl set-default graphical.target
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
 cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
 [Service]
 ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOCAT
-chown pi:pi /home/pi/.xinitrc
-chmod +x /home/pi/rundash.sh
-chown pi:pi /home/pi/rundash.sh 
+sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=pi/"
 EOF
 
 RUN <<EOF
