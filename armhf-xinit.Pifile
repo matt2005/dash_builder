@@ -1,0 +1,28 @@
+source opendsh_buster_armhf.Pifile
+
+INSTALL "scripts/.xinitrc" "/home/pi/"
+INSTALL "scripts/rundash.sh" "/home/pi/"
+INSTALL "scripts/.xinitrc" "/home/pi/"
+
+RUN <<EOF
+systemctl set-default multi-user.target
+ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
+EOCAT
+chown pi:pi /home/pi/.xinitrc
+chmod +x /home/pi/rundash.sh
+chown pi:pi /home/pi/rundash.sh 
+EOF
+
+RUN <<EOF
+bash -c 'cat >> /home/pi/.bashrc <<EOCAT
+
+if [ "\$(tty)" = "/dev/tty1" ]; then
+  startx
+fi
+EOCAT
+'
+EOF

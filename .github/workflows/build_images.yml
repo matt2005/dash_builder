@@ -45,6 +45,22 @@ jobs:
               osname: "buster",
               ostype: "Debian"
             }
+          - {
+              name: "Debian Buster armhf xinit",
+              basefile: "base_buster_armhf",
+              opendshfile: "armhf-xinit",
+              arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
+          - {
+              name: "Debian Buster armhf dash",
+              basefile: "base_buster_armhf",
+              opendshfile: "armhf-dash_service",
+              arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
 #          - {
 #              name: "Debian Buster arm64",
 #              basefile: "base_buster_arm64",
@@ -131,6 +147,22 @@ jobs:
               name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
               opendshfile: "opendsh_buster_armhf",
+              arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
+          - {
+              name: "Debian Buster armhf xinit",
+              basefile: "base_buster_armhf",
+              opendshfile: "armhf-xinit",
+              arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
+          - {
+              name: "Debian Buster armhf dash",
+              basefile: "base_buster_armhf",
+              opendshfile: "armhf-dash_service",
               arch: "armhf",
               osname: "buster",
               ostype: "Debian"
