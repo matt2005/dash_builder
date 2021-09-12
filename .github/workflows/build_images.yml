@@ -45,14 +45,14 @@ jobs:
               osname: "buster",
               ostype: "Debian"
             }
-#          - {
-#              name: "Debian Buster arm64",
-#              basefile: "base_buster_arm64",
-#              opendshfile: "opendsh_buster_arm64",
-#              arch: "arm64",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
+          - {
+              name: "Debian Buster arm64",
+              basefile: "base_buster_arm64",
+              opendshfile: "opendsh_buster_arm64",
+              arch: "arm64",
+              osname: "buster",
+              ostype: "Debian"
+            }
     name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - 
