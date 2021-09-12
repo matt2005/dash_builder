@@ -51,7 +51,7 @@ jobs:
               opendshfile: "armhf-xinit",
               arch: "armhf",
               osname: "buster",
-              ostype: "Debian"
+              ostype: "Debianxinit"
             }
 #          - {
 #              name: "Debian Buster armhf dash",
@@ -157,7 +157,7 @@ jobs:
               opendshfile: "armhf-xinit",
               arch: "armhf",
               osname: "buster",
-              ostype: "Debian"
+              ostype: "Debianxinit"
             }
 #          - {
 #              name: "Debian Buster armhf dash",
