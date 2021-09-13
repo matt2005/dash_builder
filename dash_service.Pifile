@@ -1,4 +1,4 @@
-source opendsh_buster_armhf.Pifile
+PUMP 1000M
 
 INSTALL "scripts/dash.service" "/etc/systemd/system/"
 
@@ -12,5 +12,5 @@ cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOCAT
 ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOCAT
-sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=pi/"
+#sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=pi/"
 EOF

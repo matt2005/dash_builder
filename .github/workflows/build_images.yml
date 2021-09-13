@@ -37,26 +37,10 @@ jobs:
           #"macos-10.15",
         ]
         config:
-#          - {
-#              name: "Debian Buster armhf",
-#              basefile: "base_buster_armhf",
-#              opendshfile: "opendsh_buster_armhf",
-#              arch: "armhf",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
-#          - {
-#              name: "Debian Buster armhf xinit",
-#              basefile: "base_buster_armhf",
-#              opendshfile: "armhf-xinit",
-#              arch: "armhf",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
           - {
-              name: "Debian Buster armhf dash",
+              name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
-              opendshfile: "armhf-dash_service",
+              opendshfile: "opendsh_buster_armhf",
               arch: "armhf",
               osname: "buster",
               ostype: "Debian"
@@ -143,26 +127,10 @@ jobs:
           #"macos-10.15",
         ]
         config:
-#          - {
-#              name: "Debian Buster armhf",
-#              basefile: "base_buster_armhf",
-#              opendshfile: "opendsh_buster_armhf",
-#              arch: "armhf",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
-#          - {
-#              name: "Debian Buster armhf xinit",
-#              basefile: "base_buster_armhf",
-#              opendshfile: "armhf-xinit",
-#              arch: "armhf",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
           - {
-              name: "Debian Buster armhf dash",
+              name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
-              opendshfile: "armhf-dash_service",
+              opendshfile: "opendsh_buster_armhf",
               arch: "armhf",
               osname: "buster",
               ostype: "Debian"

@@ -1,5 +1,7 @@
 FROM base_buster_armhf.img
 
+PUMP 1000MB
+
 RUN <<EOF
 apt -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
 apt -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils
@@ -23,3 +25,6 @@ EOF
 
 # Add udev rules
 INSTALL "scripts/51-dashusb.rules" "/etc/udev/rules.d/"
+
+# Add autologin and dash service
+source dash_service.Pifile
