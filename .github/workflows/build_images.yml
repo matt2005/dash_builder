@@ -1,7 +1,7 @@
 name: Build Images
 
 on:
-  push:
+#  push:
   workflow_dispatch:
     inputs:
       version:
