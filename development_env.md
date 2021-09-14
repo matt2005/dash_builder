@@ -12,5 +12,6 @@ git clone https://github.com/Nature40/pimod.git
 cd pimod
 git clone https://github.com/matt2005/dash_builder.git
 cd dash_builder
+sudo ./../pimod.sh base_buster_armhf.Pifile
 sudo ./../pimod.sh opendsh_buster_armhf.Pifile
 ```
