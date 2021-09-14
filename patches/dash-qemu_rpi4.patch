@@ -1,0 +1,40 @@
+diff --git a/install.sh b/install.sh
+index c089e12..a740205 100755
+--- a/install.sh
++++ b/install.sh
+@@ -186,7 +186,7 @@ else
+   cd build
+ 
+   #beginning cmake
+-  cmake -DCMAKE_BUILD_TYPE=Release ../
++  cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv7 -DCMAKE_BUILD_TYPE=Release ../
+   if [[ $? -eq 0 ]]; then
+       echo -e Aasdk CMake completed successfully'\n'
+   else
+@@ -261,7 +261,7 @@ if [ $gstreamer = true ]; then
+ 
+   #run cmake
+   echo Beginning cmake
+-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH) -DCMAKE_INSTALL_INCLUDEDIR=include -DQT_VERSION=5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-std=c++11
++  cmake .. -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv7 -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH) -DCMAKE_INSTALL_INCLUDEDIR=include -DQT_VERSION=5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-std=c++11
+ 
+   if [[ $? -eq 0 ]]; then
+     echo -e Make ok'\n'
+@@ -338,7 +338,7 @@ else
+   cd build
+ 
+   echo Beginning openauto cmake
+-  cmake ${installArgs} -DGST_BUILD=true ../
++  cmake ${installArgs} -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv7 -DGST_BUILD=true ../
+   if [[ $? -eq 0 ]]; then
+     echo -e Openauto CMake OK'\n'
+   else
+@@ -387,7 +387,7 @@ else
+ 
+ 	echo -e Installing dash'\n'
+   echo Running CMake for dash
+-  cmake ${installArgs} -DGST_BUILD=TRUE ../
++  cmake ${installArgs} -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv7 -DGST_BUILD=TRUE ../
+   if [[ $? -eq 0 ]]; then
+     echo -e Dash CMake OK'\n'
+   else
