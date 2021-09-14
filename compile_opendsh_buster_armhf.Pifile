@@ -11,11 +11,11 @@ apt -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbt
 bash -c "cd /home/pi && git clone https://github.com/openDsh/dash.git -b develop"
 EOF
 
-INSTALL "patches/dash-force_rpi4.patch" "/home/pi/opendsh/"
+INSTALL "patches/dash-force_rpi4.patch" "/home/pi/dash/"
 
 RUN <<EOF
-bash -c "cd /home/pi/opendsh && git apply dash-force_rpi4.patch"
-bash -c "cd /home/pi/opendsh && install.sh"
+bash -c "cd /home/pi/dash && git apply dash-force_rpi4.patch"
+bash -c "cd /home/pi/dash && install.sh"
 EOF
 
 # Add autologin and dash service
