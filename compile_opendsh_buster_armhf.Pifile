@@ -18,7 +18,7 @@ INSTALL "patches/dash-qemu_rpi4.patch" "/home/pi/dash/"
 RUN <<EOF
 bash -c "cd /home/pi/dash && git apply dash-force_rpi4.patch"
 bash -c "cd /home/pi/dash && git apply dash-qemu_rpi4.patch"
-bash -c "cd /home/pi/dash && ./install.sh"
+bash -c 'export CFLAGS="-D_FILE_OFFSET_BITS=64" && export CXXFLAGS="-D_FILE_OFFSET_BITS=64" && cd /home/pi/dash && ./install.sh'
 EOF
 
 # Add autologin and dash service
