@@ -1,4 +1,4 @@
-name: Build Images xinit
+name: Build Images COmpile
 
 on:
   workflow_dispatch:
@@ -45,12 +45,12 @@ jobs:
 #              ostype: "Debian"
 #            }
           - {
-              name: "Debian Buster armhf xinit",
+              name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
-              opendshfile: "armhf-xinit",
+              opendshfile: "compile_opendsh_buster_armhf",
               arch: "armhf",
               osname: "buster",
-              ostype: "Debianxinit"
+              ostype: "Debian-compile"
             }
 #          - {
 #              name: "Debian Buster armhf dash",
@@ -151,12 +151,12 @@ jobs:
 #              ostype: "Debian"
 #            }
           - {
-              name: "Debian Buster armhf xinit",
+              name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
-              opendshfile: "armhf-xinit",
+              opendshfile: "compile_opendsh_buster_armhf",
               arch: "armhf",
               osname: "buster",
-              ostype: "Debianxinit"
+              ostype: "Debian-compile"
             }
 #          - {
 #              name: "Debian Buster armhf dash",
