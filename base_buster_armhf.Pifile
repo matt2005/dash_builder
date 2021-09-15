@@ -3,8 +3,8 @@ PUMP 1000M
 
 # Update OS and sources
 RUN <<EOF
-apt update
-DEBIAN_FRONTEND=noninteractive apt -y dist-upgrade
-apt install -y sl
-apt autoremove -y
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+apt-get install -y sl
+apt-get autoremove -y
 EOF
