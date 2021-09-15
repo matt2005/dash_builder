@@ -1,0 +1,58 @@
+# recompile pulseaudio to fix imtu bug for internal bluetooth when using HFP
+
+RUN <<EOF
+sed -i 's/#deb-src/deb-src/g' /etc/apt/sources.list
+apt-get update -y
+git clone git://anongit.freedesktop.org/pulseaudio/pulseaudio
+apt-get install -y autopoint
+cd pulseaudio
+git checkout tags/v12.99.3
+sed -i 's/*imtu = 48;/*imtu = 60;/g' src/modules/bluetooth/backend-native.c
+sed -i 's/*imtu = 48;/*imtu = 60;/g' src/modules/bluetooth/backend-ofono.c
+sudo apt-get build-dep -y pulseaudio
+./bootstrap.sh
+make -j4
+make install
+ldconfig
+# copy configs and force an exit 0 just in case files are identical (we don't care but it will make pimod exit)
+cp /usr/share/pulseaudio/alsa-mixer/profile-sets/* /usr/local/share/pulseaudio/alsa-mixer/profile-sets/
+EOF
+
+#install ofono to support bluetooth HFP
+
+RUN <<EOF
+sudo apt-get install -y ofono
+sed -i 's/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g' /etc/pulse/default.pa
+cat <<EOT >> /etc/pulse/default.pa
+### Echo cancel and noise reduction
+.ifexists module-echo-cancel.so
+load-module module-echo-cancel aec_method=webrtc source_name=ec_out 
+sink_name=ec_ref
+set-default-source ec_out
+set-default-sink ec_ref
+.endif
+EOT
+EOF
+
+RUN <<EOF
+# add network, bluetooth, pulse volume to lxpanel
+cat <<EOT >> /home/pi/.config/lxpanel/LXDE-pi/panels/panel
+Plugin {
+  type=bluetooth
+  Config {
+  }
+}
+Plugin {
+  type=volumepulse
+  Config {
+  }
+}
+Plugin {
+  type=dhcpcdui
+  Config {
+  }
+}
+EOT
+#disable screensaver
+sed -i 's/@xscreensaver -no-splash//g' /etc/xdg/lxsession/LXDE-pi/autostart
+EOF
