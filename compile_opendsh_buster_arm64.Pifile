@@ -19,7 +19,10 @@ INSTALL "patches/dash-qemu_rpi4.patch" "/home/pi/dash/"
 RUN <<EOF
 bash -c "cd /home/pi/dash && git apply dash-force_rpi4.patch"
 bash -c "cd /home/pi/dash && git apply dash-qemu_rpi4.patch"
-bash -c 'cd /home/pi/dash && ./install.sh'
+bash -c 'cd /home/pi/dash && ./install.sh --deps'
+bash -c 'cd /home/pi/dash && ./install.sh --aasdk --debug'
+bash -c 'cd /home/pi/dash && ./install.sh --gstreamer --debug'
+bash -c 'cd /home/pi/dash && ./install.sh --openauto --debug'
 EOF
 
 # Add autologin and dash service
