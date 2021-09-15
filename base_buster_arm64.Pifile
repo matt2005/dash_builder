@@ -1,10 +1,10 @@
 FROM https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2021-05-28/2021-05-07-raspios-buster-arm64-lite.zip
-PUMP 2000M
+PUMP 1000M
 
 # Update OS and sources
 RUN <<EOF
-apt update
-DEBIAN_FRONTEND=noninteractive apt -y dist-upgrade
-apt install -y sl
-apt autoremove -y
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+apt-get install -y sl
+apt-get autoremove -y
 EOF
