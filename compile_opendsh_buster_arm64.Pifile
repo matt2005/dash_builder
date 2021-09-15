@@ -15,11 +15,8 @@ EOF
 
 INSTALL "patches/dash-force_rpi4.patch" "/home/pi/dash/"
 
-INSTALL "patches/dash-qemu_rpi4.patch" "/home/pi/dash/"
-
 RUN <<EOF
 bash -c "cd /home/pi/dash && git apply dash-force_rpi4.patch"
-bash -c "cd /home/pi/dash && git apply dash-qemu_rpi4.patch"
 bash -c 'cd /home/pi/dash && ./install.sh'
 EOF
 
