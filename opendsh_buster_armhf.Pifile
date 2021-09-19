@@ -15,14 +15,13 @@ bash -c "/home/pi/dash/install.sh --deps"
 EOF
 
 RUN <<EOF
-wget -v -O PUBLIC.KEY https://matt2005.github.io/packagerepo/PUBLIC.KEY 
+wget -v -O PUBLIC.KEY https://opendsh.github.io/packagerepo/PUBLIC.KEY 
 apt-key add PUBLIC.KEY
 rm PUBLIC.KEY 
-bash -c "echo 'deb [ arch=armhf ] https://matt2005.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/matt2005.list"
+bash -c "echo 'deb [ arch=armhf ] https://opendsh.github.io/packagerepo/apt/debian buster main' > /etc/apt/sources.list.d/opendsh.list"
 apt-get update
 apt-get upgrade -y
 apt-get -y install aasdk openautoopendsh qtgstreamer opendsh
-chmod +x /usr/local/opendsh/bin/dash
 EOF
 
 # Add udev rules
