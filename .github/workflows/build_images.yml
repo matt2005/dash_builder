@@ -38,11 +38,11 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Bullseye armhf",
-              basefile: "base_Bullseye_armhf",
-              opendshfile: "opendsh_bullseye_armhf",
-              arch: "armhf",
-              osname: "Bullseye",
+              name: "Debian bullseye arm64",
+              basefile: "base_bullseye_arm64",
+              opendshfile: "opendsh_bullseye_arm64",
+              arch: "arm64",
+              osname: "bullseye",
               ostype: "Debian"
             }
     name: 'Build:  ${{ matrix.config.name }}'
@@ -120,11 +120,11 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Bullseye armhf",
-              basefile: "base_Bullseye_armhf",
-              opendshfile: "opendsh_bullseye_armhf",
-              arch: "armhf",
-              osname: "Bullseye",
+              name: "Debian bullseye arm64",
+              basefile: "base_bullseye_arm64",
+              opendshfile: "opendsh_bullseye_arm64",
+              arch: "arm64",
+              osname: "bullseye",
               ostype: "Debian"
             }
 

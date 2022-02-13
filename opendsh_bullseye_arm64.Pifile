@@ -1,4 +1,4 @@
-FROM base_bullseye_armhf.img
+FROM base_bullseye_arm64.img
 
 PUMP 1000M
 
