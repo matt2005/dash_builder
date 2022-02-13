@@ -38,21 +38,13 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Buster armhf",
-              basefile: "base_buster_armhf",
-              opendshfile: "opendsh_buster_armhf",
+              name: "Debian Bullseye armhf",
+              basefile: "base_Bullseye_armhf",
+              opendshfile: "opendsh_bullseye_armhf",
               arch: "armhf",
-              osname: "buster",
+              osname: "Bullseye",
               ostype: "Debian"
             }
-#          - {
-#              name: "Debian Buster arm64",
-#              basefile: "base_buster_arm64",
-#              opendshfile: "opendsh_buster_arm64",
-#              arch: "arm64",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
     name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - 
@@ -128,21 +120,13 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Buster armhf",
-              basefile: "base_buster_armhf",
-              opendshfile: "opendsh_buster_armhf",
+              name: "Debian Bullseye armhf",
+              basefile: "base_Bullseye_armhf",
+              opendshfile: "opendsh_bullseye_armhf",
               arch: "armhf",
-              osname: "buster",
+              osname: "Bullseye",
               ostype: "Debian"
             }
-#          - {
-#              name: "Debian Buster arm64",
-#              basefile: "base_buster_arm64",
-#              opendshfile: "opendsh_buster_arm64",
-#              arch: "arm64",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
 
     name: 'Upload release:  ${{ matrix.config.name }}'
     steps:
