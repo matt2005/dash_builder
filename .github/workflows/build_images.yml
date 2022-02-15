@@ -38,26 +38,26 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Buster armhf",
-              basefile: "base_buster_armhf",
-              opendshfile: "opendsh_buster_armhf",
-              arch: "armhf",
-              osname: "buster",
+              name: "Debian bullseye arm64",
+              basefile: "base_bullseye_arm64",
+              opendshfile: "opendsh_bullseye_arm64",
+              arch: "arm64",
+              osname: "bullseye",
               ostype: "Debian"
             }
-#          - {
-#              name: "Debian Buster arm64",
-#              basefile: "base_buster_arm64",
-#              opendshfile: "opendsh_buster_arm64",
-#              arch: "arm64",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
+          - {
+              name: "Debian bullseye armhf",
+              basefile: "base_bullseye_armhf",
+              opendshfile: "opendsh_bullseye_armhf",
+              arch: "armhf",
+              osname: "bullseye",
+              ostype: "Debian"
+            }
     name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - 
         name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
       - 
         name: Get the version
         id: get_version
@@ -87,14 +87,27 @@ jobs:
         run: mv ${{ matrix.config.opendshfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
       - 
         name: Package zip
-        run: zip opendsh-${{ steps.get_version.outputs.version }}.zip opendsh-${{ steps.get_version.outputs.version }}.img
+        id: packagezip
+        run: |
+          IMG_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.img"
+          ZIP_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.zip"
+          SHA256HASH="${IMG_FILENAME}.sha256"
+          MD5ZIPHASH="${ZIP_FILENAME}.md5"
+          sha256sum "${IMG_FILENAME}" > "${SHA256HASH}"
+          zip "${ZIP_FILENAME}" "${IMG_FILENAME}" "${SHA256HASH}"
+          md5sum "${ZIP_FILENAME}" > "${MD5ZIPHASH}"
+          echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
+          echo ::set-output name=SHA256HASH::"${SHA256HASH}"
+          echo ::set-output name=MD5ZIPHASH::"${MD5ZIPHASH}"
       - 
         name: Upload build artifacts 
         id: upload_deploy
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.get_version.outputs.version }}
-          path: opendsh-${{ steps.get_version.outputs.version }}.zip
+          path: |
+            ${{ steps.packagezip.outputs.ZIP_FILENAME }}
+            ${{ steps.packagezip.outputs.MD5ZIPHASH }}
 # Create Release
   release:
     runs-on: ubuntu-latest
@@ -128,22 +141,21 @@ jobs:
         ]
         config:
           - {
-              name: "Debian Buster armhf",
-              basefile: "base_buster_armhf",
-              opendshfile: "opendsh_buster_armhf",
-              arch: "armhf",
-              osname: "buster",
+              name: "Debian bullseye arm64",
+              basefile: "base_bullseye_arm64",
+              opendshfile: "opendsh_bullseye_arm64",
+              arch: "arm64",
+              osname: "bullseye",
               ostype: "Debian"
             }
-#          - {
-#              name: "Debian Buster arm64",
-#              basefile: "base_buster_arm64",
-#              opendshfile: "opendsh_buster_arm64",
-#              arch: "arm64",
-#              osname: "buster",
-#              ostype: "Debian"
-#            }
-
+          - {
+              name: "Debian bullseye armhf",
+              basefile: "base_bullseye_armhf",
+              opendshfile: "opendsh_bullseye_armhf",
+              arch: "armhf",
+              osname: "bullseye",
+              ostype: "Debian"
+            }
     name: 'Upload release:  ${{ matrix.config.name }}'
     steps:
       - 

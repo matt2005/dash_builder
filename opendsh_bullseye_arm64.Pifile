@@ -1,0 +1,3 @@
+FROM base_bullseye_arm64.img
+
+source opendsh_bullseye_build.Pifile

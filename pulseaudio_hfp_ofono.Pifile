@@ -22,12 +22,11 @@ EOF
 
 RUN <<EOF
 sudo apt-get install -y ofono
-sed -i 's/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g' /etc/pulse/default.pa
-cat <<EOT >> /etc/pulse/default.pa
+sed -i 's/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g' /usr/local/etc/pulse/default.pa
+cat <<EOT >> /usr/local/etc/pulse/default.pa
 ### Echo cancel and noise reduction
 .ifexists module-echo-cancel.so
-load-module module-echo-cancel aec_method=webrtc source_name=ec_out 
-sink_name=ec_ref
+load-module module-echo-cancel aec_method=webrtc source_name=ec_out sink_name=ec_ref
 set-default-source ec_out
 set-default-sink ec_ref
 .endif
@@ -36,23 +35,25 @@ EOF
 
 RUN <<EOF
 # add network, bluetooth, pulse volume to lxpanel
-cat <<EOT >> /home/pi/.config/lxpanel/LXDE-pi/panels/panel
-Plugin {
-  type=bluetooth
-  Config {
-  }
-}
-Plugin {
-  type=volumepulse
-  Config {
-  }
-}
-Plugin {
-  type=dhcpcdui
-  Config {
-  }
-}
-EOT
-#disable screensaver
-sed -i 's/@xscreensaver -no-splash//g' /etc/xdg/lxsession/LXDE-pi/autostart
+# mkdir -p /home/pi/.config/lxpanel/LXDE-pi/panels
+# touch /home/pi/.config/lxpanel/LXDE-pi/panel
+# cat <<EOT >> /home/pi/.config/lxpanel/LXDE-pi/panels/panel
+# Plugin {
+#   type=bluetooth
+#   Config {
+#   }
+# }
+# Plugin {
+#   type=volumepulse
+#   Config {
+#   }
+# }
+# Plugin {
+#   type=dhcpcdui
+#   Config {
+#   }
+# }
+# EOT
+apt-get -y install xcompmgr
+echo "xcompmgr -C -c -o 0.5 -l -19 -t -10 -r 14" >> /etc/xdg/lxsession/LXDE-pi/autostart
 EOF

@@ -1,0 +1,28 @@
+PUMP 1500M
+
+# Update OS and sources
+RUN <<EOF
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+apt-get install -y sl
+apt-get autoremove -y
+EOF
+
+
+# Disable boot text
+RUN <<EOF
+echo "logo.nologo" >>  /boot/cmdline.txt
+EOF
+
+
+# Disable timesyncd for better boot time
+RUN <<EOF
+# systemctl disable systemd-timesyncd
+# systemctl disable cups.service
+# systemctl disable avahi-daemon.service
+# systemctl disable dphys-swapfile.service
+# systemctl disable apt-daily.service
+# systemctl disable keyboard-setup.service
+# systemctl disable raspi-config.service
+# systemctl disable triggerhappy.service
+EOF
