@@ -1,15 +1,4 @@
-# CAN settings
-RUN <<EOF
-cat <<EOT >> /etc/network/interfaces
-allow-hotplug can0
-iface can0 can static
-    bitrate 500000
-EOT
-EOF
-
 RUN mkdir -p /usr/share/X11/xorg.conf.d
-# Touchscreen calibration
-INSTALL "scripts/99-calibration.conf" "/usr/share/X11/xorg.conf.d/99-calibration.conf"
 
 # configure memory split and disable screensaver, set hostname
 RUN <<EOF
@@ -17,9 +6,6 @@ raspi-config nonint do_memory_split 128
 raspi-config nonint do_hostname OpenDsh
 sed -i 's/apt-get install realvnc-vnc-server/apt-get install -y realvnc-vnc-server/g' /usr/bin/raspi-config
 raspi-config nonint do_vnc 0
-raspi-config nonint do_ssh 0
-raspi-config nonint do_wifi_country US
-raspi-config nonint do_blanking 1
-rfkill unblock wlan
+raspi-config nonint do_ssh 1
 
 EOF
