@@ -1,4 +1,3 @@
-
 PUMP 1000M
 
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
@@ -24,29 +23,6 @@ bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --dash"
 bash -c "sudo -u pi mkdir -p /home/pi/.config/openDsh"
 EOF
 
-# Install dash conf
-INSTALL "scripts/dash.conf" "/home/pi/.config/openDsh/dash.conf"
-
-RUN <<'EOF'
-chown pi:pi /home/pi/.config/openDsh/dash.conf
-EOF
-
-# Install openauto conf
-INSTALL "scripts/openauto.ini" "/home/pi/dash/openauto.ini"
-
-# Add udev rules
-INSTALL "scripts/51-dashusb.rules" "/etc/udev/rules.d/"
-
-RUN <<'EOF'
-chown pi:pi /home/pi/dash/openauto.ini
-EOF
-
-
-RUN <<'EOF'
-apt-get install -y xserver-xorg-input-evdev
-rm /usr/share/X11/xorg.conf.d/40-libinput.conf
-EOF
-INSTALL "scripts/40-libinput.conf" "/usr/share/X11/xorg.conf.d/40-libinput.conf"
 # Add autologin and dash service
 source dash_service.Pifile
 PUMP 1000M

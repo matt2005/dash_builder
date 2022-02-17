@@ -40,7 +40,8 @@ jobs:
           - {
               name: "Debian bullseye arm64",
               basefile: "base_bullseye_arm64",
-              opendshfile: "opendsh_bullseye_arm64",
+              compilefile: "compile_bullseye_arm64",
+              finalfile: "final_bullseye_arm64",
               arch: "arm64",
               osname: "bullseye",
               ostype: "Debian"
@@ -48,7 +49,8 @@ jobs:
           - {
               name: "Debian bullseye armhf",
               basefile: "base_bullseye_armhf",
-              opendshfile: "opendsh_bullseye_armhf",
+              compilefile: "compile_bullseye_armhf",
+              finalfile: "final_bullseye_armhf",
               arch: "armhf",
               osname: "bullseye",
               ostype: "Debian"
@@ -78,27 +80,32 @@ jobs:
         with:
           pifile: ${{ matrix.config.basefile }}.Pifile
       - 
+        name: Create Compile Image
+        uses: Nature40/pimod@v0.3.0
+        with:
+          pifile: ${{ matrix.config.compilefile }}.Pifile
+      - 
         name: Create Final Image
         uses: Nature40/pimod@v0.3.0
         with:
-          pifile: ${{ matrix.config.opendshfile }}.Pifile
+          pifile: ${{ matrix.config.finalfile }}.Pifile
       - 
         name: Rename Image
-        run: mv ${{ matrix.config.opendshfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
+        run: mv ${{ matrix.config.finalfile }}.img opendsh-${{ steps.get_version.outputs.version }}.img
       - 
         name: Package zip
         id: packagezip
         run: |
           IMG_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.img"
           ZIP_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.zip"
-          SHA256HASH="${IMG_FILENAME}.sha256"
-          MD5ZIPHASH="${ZIP_FILENAME}.md5"
-          sha256sum "${IMG_FILENAME}" > "${SHA256HASH}"
-          zip "${ZIP_FILENAME}" "${IMG_FILENAME}" "${SHA256HASH}"
-          md5sum "${ZIP_FILENAME}" > "${MD5ZIPHASH}"
+          SHA256HASHFILE="${IMG_FILENAME}.sha256"
+          MD5ZIPHASHFILE="${ZIP_FILENAME}.md5"
+          sha256sum "${IMG_FILENAME}" > "${SHA256HASHFILE}"
+          zip "${ZIP_FILENAME}" "${IMG_FILENAME}" "${SHA256HASHFILE}"
+          md5sum "${ZIP_FILENAME}" > "${MD5ZIPHASHFILE}"
           echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
-          echo ::set-output name=SHA256HASH::"${SHA256HASH}"
-          echo ::set-output name=MD5ZIPHASH::"${MD5ZIPHASH}"
+          echo ::set-output name=SHA256HASHFILE::"${SHA256HASHFILE}"
+          echo ::set-output name=MD5ZIPHASHFILE::"${MD5ZIPHASHFILE}"
       - 
         name: Upload build artifacts 
         id: upload_deploy
@@ -107,7 +114,7 @@ jobs:
           name: ${{ steps.get_version.outputs.version }}
           path: |
             ${{ steps.packagezip.outputs.ZIP_FILENAME }}
-            ${{ steps.packagezip.outputs.MD5ZIPHASH }}
+            ${{ steps.packagezip.outputs.MD5ZIPHASHFILE }}
 # Create Release
   release:
     runs-on: ubuntu-latest
@@ -120,7 +127,7 @@ jobs:
         name: Create GitHub release
         id: create_release
         uses: release-drafter/release-drafter@v5
-        inputs:
+        with:
           version: ${{needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,16 +146,12 @@ jobs:
         config:
           - {
               name: "Debian bullseye arm64",
-              basefile: "base_bullseye_arm64",
-              opendshfile: "opendsh_bullseye_arm64",
               arch: "arm64",
               osname: "bullseye",
               ostype: "Debian"
             }
           - {
               name: "Debian bullseye armhf",
-              basefile: "base_bullseye_armhf",
-              opendshfile: "opendsh_bullseye_armhf",
               arch: "armhf",
               osname: "bullseye",
               ostype: "Debian"
@@ -167,8 +170,8 @@ jobs:
         env:
           version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
-          ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
+          ostype: ${{ matrix.config.ostype }}
       - 
         name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -186,3 +189,20 @@ jobs:
           asset_path: opendsh-${{ steps.get_version.outputs.version }}.zip
           asset_name: opendsh-${{ steps.get_version.outputs.version }}.zip
           asset_content_type: application/zip
+      - 
+        name: Get File Hashes from files
+        id: filehashes
+        run: |
+          ZIP_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.zip"
+          MD5_ZIPHASHFILE="${ZIP_FILENAME}.md5"
+          MD5_ZIPHASH=cat $MD5_ZIPHASHFILE}
+          echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
+          echo ::set-output name=MD5_ZIPHASH::"${MD5_ZIPHASH}"
+      - 
+        name: Update GitHub Release
+        id: add-file-hashes-to-release
+        uses: tubone24/update_release@v1.3.1
+        with:
+          is_append_body: true
+          body: "${{ steps.filehashes.outputs.ZIP_FILENAME }} MD5 Hash: ${{ steps.filehashes.outputs.MD5ZIPHASH }}"
+
