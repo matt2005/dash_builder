@@ -1,9 +1,9 @@
 # DASH_BUILDER
 
-Dash_Builder uses the github action Nature40/pimod to build the images
+Dash_Builder uses the github action Nature40/pimod to build the images.
 
 ## Process
-The below process is performed on both armhf and arm64.
+The below process is performed on both armhf and arm64. This takes about 3hours to build via github actions.
 
 ### Build Base Image
 
@@ -18,3 +18,7 @@ The below process is performed on both armhf and arm64.
 1. Clone dash repo
 1. Setup Dash
 
+## Credits
+
+@matt2005
+@icecube45
