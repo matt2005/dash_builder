@@ -4,7 +4,7 @@
 
 ### Debian
 ```bash
-$ sudo apt-get install binfmt-support fdisk file kpartx lsof parted qemu qemu-user-static unzip p7zip-full wget xz-utils
+$ sudo apt-get install binfmt-support fdisk file kpartx lsof parted qemu qemu-user-static unzip p7zip-full wget xz-utils units
 ```
 
 ```
