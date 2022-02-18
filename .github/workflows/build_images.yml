@@ -127,8 +127,6 @@ jobs:
         name: Create GitHub release
         id: create_release
         uses: release-drafter/release-drafter@v5
-        with:
-          version: ${{needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Upload release artifacts
