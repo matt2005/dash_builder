@@ -34,6 +34,18 @@ EOT
 EOF
 
 RUN <<EOF
+cd /home/pi
+sudo apt-get install -y libdbus-1-dev libudev-dev libical-dev libreadline-dev libjson-c-dev
+wget www.kernel.org/pub/linux/bluetooth/bluez-5.63.tar.xz
+tar -xvf bluez-5.63.tar.xz bluez-5.63/
+rm bluez-5.63.tar.xz
+cd bluez-5.63
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library --disable-manpages --enable-deprecated
+make
+sudo make install
+EOF
+
+RUN <<EOF
 # add network, bluetooth, pulse volume to lxpanel
 # mkdir -p /home/pi/.config/lxpanel/LXDE-pi/panels
 # touch /home/pi/.config/lxpanel/LXDE-pi/panel
