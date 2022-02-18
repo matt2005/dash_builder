@@ -10,7 +10,7 @@ EOF
 RUN <<EOF
 apt-get -y install pixflat-icons lxplug-bluetooth lxplug-volumepulse lxplug-network
 bash -c "cd /home/pi && sudo -u pi git clone https://github.com/openDsh/dash"
-bash -c "cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j4/g' install.sh"
+bash -c "cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j$(nproc)/g' install.sh"
 EOF
 RUN <<'EOF'
 bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --deps"
