@@ -121,6 +121,11 @@ jobs:
     needs: [ version, build ]
     name: 'Create release'
     outputs:
+      release_id: ${{ steps.create_release.outputs.id }}
+      release_name: ${{ steps.create_release.outputs.name }}
+      release_tag_name: ${{ steps.create_release.outputs.tag_name }}
+      release_body: ${{ steps.create_release.outputs.body }}
+      release_html_url: ${{ steps.create_release.outputs.html_url }}
       release_upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
     steps:
       - 
@@ -197,13 +202,3 @@ jobs:
           echo ${MD5_ZIPHASH}
           echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
           echo ::set-output name=MD5_ZIPHASH::"${MD5_ZIPHASH}"
-#      - 
-#        name: Update GitHub Release
-#        id: add-file-hashes-to-release
-#        uses: tubone24/update_release@v1.3.1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          is_append_body: true
-#          body: "${{ steps.filehashes.outputs.ZIP_FILENAME }} MD5 Hash: ${{ steps.filehashes.outputs.MD5ZIPHASH }}"
-
