@@ -1,6 +1,6 @@
 [Unit]
 Description=Dash
-Requires=multi-user.target
+After=bluetooth.target
 
 
 [Service]
@@ -12,7 +12,7 @@ Environment=DISPLAY=:0
 Environment=XAUTHORITY=/home/pi/.Xauthority
 Environment=XDG_RUNTIME_DIR=/run/user/1000
 WorkingDirectory=/home/pi/dash/
-ExecStartPre=/bin/sleep 2
+#ExecStartPre=/bin/sleep 2
 ExecStart=/home/pi/dash/bin/dash
 Restart=on-failure
 RestartSec=10s
