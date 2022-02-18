@@ -193,7 +193,7 @@ jobs:
         run: |
           ZIP_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.zip"
           MD5_ZIPHASHFILE="${ZIP_FILENAME}.md5"
-          MD5_ZIPHASH=cat ${MD5_ZIPHASHFILE}
+          MD5_ZIPHASH="cat ${MD5_ZIPHASHFILE}"
           echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
           echo ::set-output name=MD5_ZIPHASH::"${MD5_ZIPHASH}"
       - 
