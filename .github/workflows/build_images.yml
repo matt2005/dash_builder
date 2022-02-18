@@ -194,15 +194,16 @@ jobs:
           ZIP_FILENAME="opendsh-${{ steps.get_version.outputs.version }}.zip"
           MD5_ZIPHASHFILE="${ZIP_FILENAME}.md5"
           MD5_ZIPHASH="cat ${MD5_ZIPHASHFILE}"
+          echo ${MD5_ZIPHASH}
           echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
           echo ::set-output name=MD5_ZIPHASH::"${MD5_ZIPHASH}"
-      - 
-        name: Update GitHub Release
-        id: add-file-hashes-to-release
-        uses: tubone24/update_release@v1.3.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          is_append_body: true
-          body: "${{ steps.filehashes.outputs.ZIP_FILENAME }} MD5 Hash: ${{ steps.filehashes.outputs.MD5ZIPHASH }}"
+#      - 
+#        name: Update GitHub Release
+#        id: add-file-hashes-to-release
+#        uses: tubone24/update_release@v1.3.1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          is_append_body: true
+#          body: "${{ steps.filehashes.outputs.ZIP_FILENAME }} MD5 Hash: ${{ steps.filehashes.outputs.MD5ZIPHASH }}"
 
