@@ -19,9 +19,9 @@ jobs:
           if [ -z "$version" ]
           then
                 version=$(date '+%Y%m%d')
-                echo ::set-output name=version::"${version}"
+                echo version="${version}" >> $GITHUB_OUTPUT
           else
-                echo ::set-output name=version::"${version}"
+                echo version="${version}" >> $GITHUB_OUTPUT
           fi
         env:
           version: ${{ github.event.inputs.version }}
@@ -68,7 +68,7 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          echo ::set-output name=version::"${version}-${osname}-${arch}"
+          echo version="${version}-${osname}-${arch}" >> $GITHUB_OUTPUT
         env:
           version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
@@ -103,9 +103,9 @@ jobs:
           sha256sum "${IMG_FILENAME}" > "${SHA256HASHFILE}"
           zip "${ZIP_FILENAME}" "${IMG_FILENAME}" "${SHA256HASHFILE}"
           md5sum "${ZIP_FILENAME}" > "${MD5ZIPHASHFILE}"
-          echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
-          echo ::set-output name=SHA256HASHFILE::"${SHA256HASHFILE}"
-          echo ::set-output name=MD5ZIPHASHFILE::"${MD5ZIPHASHFILE}"
+          echo ZIP_FILENAME="${ZIP_FILENAME}" >> $GITHUB_OUTPUT
+          echo SHA256HASHFILE="${SHA256HASHFILE}" >> $GITHUB_OUTPUT
+          echo MD5ZIPHASHFILE="${MD5ZIPHASHFILE}" >> $GITHUB_OUTPUT
       - 
         name: Upload build artifacts 
         id: upload_deploy
@@ -169,7 +169,7 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          echo ::set-output name=version::"${version}-${osname}-${arch}"
+          echo version="${version}-${osname}-${arch}" >> $GITHUB_OUTPUT
         env:
           version: ${{needs.version.outputs.version }}
           arch: ${{ matrix.config.arch }}
@@ -200,5 +200,5 @@ jobs:
           MD5_ZIPHASHFILE="${ZIP_FILENAME}.md5"
           MD5_ZIPHASH="cat ${MD5_ZIPHASHFILE}"
           echo ${MD5_ZIPHASH}
-          echo ::set-output name=ZIP_FILENAME::"${ZIP_FILENAME}"
-          echo ::set-output name=MD5_ZIPHASH::"${MD5_ZIPHASH}"
+          echo ZIP_FILENAME="${ZIP_FILENAME}" >> $GITHUB_OUTPUT
+          echo MD5_ZIPHASH="${MD5_ZIPHASH}" >> $GITHUB_OUTPUT
