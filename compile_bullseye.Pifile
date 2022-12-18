@@ -25,5 +25,6 @@ EOF
 
 # Add autologin and dash service
 source dash_service.Pifile
+source configuration.Pifile
 PUMP 1000M
 source pulseaudio_hfp_ofono.Pifile

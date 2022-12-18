@@ -2,27 +2,30 @@ PUMP 1500M
 
 # Update OS and sources
 RUN <<EOF
+export LC_ALL=C
+export LANG=en_US.UTF-8
+echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
+locale-gen 
+
+dpkg-reconfigure locales
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
 apt-get install -y sl
 apt-get autoremove -y
+useradd -m pi
+echo pi:opendsh | chpasswd
+sudo adduser pi sudo
 EOF
 
+# Setup ntp
+RUN <<EOF
+apt-get  install -y ntp ntpdate
+service ntp stop
+ntpdate 0.us.pool.ntp.org
+service ntp start
+EOF
 
 # Disable boot text
 RUN <<EOF
-echo "logo.nologo" >>  /boot/cmdline.txt
-EOF
-
-
-# Disable timesyncd for better boot time
-RUN <<EOF
-# systemctl disable systemd-timesyncd
-# systemctl disable cups.service
-# systemctl disable avahi-daemon.service
-# systemctl disable dphys-swapfile.service
-# systemctl disable apt-daily.service
-# systemctl disable keyboard-setup.service
-# systemctl disable raspi-config.service
-# systemctl disable triggerhappy.service
+echo -n "logo.nologo loglevel=3 quiet plymouth.ignore-serial-consoles fastboot systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target" >>  /boot/cmdline.txt
 EOF

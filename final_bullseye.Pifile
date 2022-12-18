@@ -24,12 +24,4 @@ RUN mkdir -p /usr/share/X11/xorg.conf.d
 
 INSTALL "scripts/40-libinput.conf" "/usr/share/X11/xorg.conf.d/40-libinput.conf"
 
-# configure memory split and disable screensaver, set hostname, Setup vnc, enable ssh
-RUN <<EOF
-raspi-config nonint do_memory_split 128
-raspi-config nonint do_hostname OpenDsh
-sed -i 's/apt-get install realvnc-vnc-server/apt-get install -y realvnc-vnc-server/g' /usr/bin/raspi-config
-raspi-config nonint do_vnc 0
-raspi-config nonint do_ssh 1
-
-EOF
+INSTALL scripts/firstrun.sh /boot/firstrun.sh
