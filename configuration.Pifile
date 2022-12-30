@@ -1,4 +1,4 @@
-RUN <<EOF
+RUN <<'EOF'
 cat <<EOT >> /boot/config.txt
 [pi4]
 arm_freq=1800
@@ -26,7 +26,7 @@ EOT
 EOF
 
 # CAN settings
-RUN <<EOF
+RUN <<'EOF'
 cat <<EOT >> /etc/network/interfaces
 
 #allow-hotplug can0
@@ -36,14 +36,14 @@ EOT
 EOF
 
 #Setup network interfaces
-RUN <<EOF
+RUN <<'EOF'
 apt-get -y install network-manager links
 raspi-config nonint do_netconf 2
 
 EOF
 
 # setup access point
-RUN <<EOF
+RUN <<'EOF'
 apt-get install -y vim
 cat <<EOT >> /etc/dhcpcd.conf
 denyinterfaces wlan0
@@ -52,7 +52,7 @@ EOT
 EOF
 
 # configure memory split and disable screensaver, set hostname
-RUN <<EOF
+RUN <<'EOF'
 raspi-config nonint do_memory_split 128
 raspi-config nonint do_hostname OpenDsh
 sed -i 's/apt-get install realvnc-vnc-server/apt-get install -y realvnc-vnc-server/g' /usr/bin/raspi-config

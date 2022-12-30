@@ -1,7 +1,10 @@
 name: Build Images
 
 on:
-#  push:
+  push:
+    branches:
+      - main
+      - 'releases/**'
   workflow_dispatch:
     inputs:
       version:

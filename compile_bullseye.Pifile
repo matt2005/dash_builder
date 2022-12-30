@@ -7,7 +7,7 @@ apt-get -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-i
 apt-get -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
 EOF
 # add in pi ux tweaks (icons + lxpanel plugins)
-RUN <<EOF
+RUN <<'EOF'
 apt-get -y install pixflat-icons lxplug-bluetooth lxplug-volumepulse lxplug-network
 bash -c "cd /home/pi && sudo -u pi git clone https://github.com/openDsh/dash"
 bash -c "cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j$(nproc)/g' install.sh"

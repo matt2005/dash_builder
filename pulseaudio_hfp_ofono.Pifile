@@ -1,6 +1,6 @@
 # recompile pulseaudio to fix imtu bug for internal bluetooth when using HFP
 
-RUN <<EOF
+RUN <<'EOF'
 sed -i 's/#deb-src/deb-src/g' /etc/apt/sources.list
 apt-get update -y
 git clone git://anongit.freedesktop.org/pulseaudio/pulseaudio
@@ -20,7 +20,7 @@ EOF
 
 #install ofono to support bluetooth HFP
 
-RUN <<EOF
+RUN <<'EOF'
 sudo apt-get install -y ofono
 sed -i 's/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g' /usr/local/etc/pulse/default.pa
 cat <<EOT >> /usr/local/etc/pulse/default.pa
@@ -33,7 +33,7 @@ set-default-sink ec_ref
 EOT
 EOF
 
-RUN <<EOF
+RUN <<'EOF'
 cd /home/pi
 sudo apt-get install -y libdbus-1-dev libudev-dev libical-dev libreadline-dev libjson-c-dev
 wget www.kernel.org/pub/linux/bluetooth/bluez-5.63.tar.xz
@@ -45,7 +45,7 @@ make
 sudo make install
 EOF
 
-RUN <<EOF
+RUN <<'EOF'
 # add network, bluetooth, pulse volume to lxpanel
 # mkdir -p /home/pi/.config/lxpanel/LXDE-pi/panels
 # touch /home/pi/.config/lxpanel/LXDE-pi/panel
