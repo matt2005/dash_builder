@@ -76,17 +76,17 @@ jobs:
           osname: ${{ matrix.config.osname }}
       - 
         name: Create Base Image
-        uses: Nature40/pimod@v0.3.0
+        uses: Nature40/pimod@v0.6.0
         with:
           pifile: ${{ matrix.config.basefile }}.Pifile
       - 
         name: Create Compile Image
-        uses: Nature40/pimod@v0.3.0
+        uses: Nature40/pimod@v0.6.0
         with:
           pifile: ${{ matrix.config.compilefile }}.Pifile
       - 
         name: Create Final Image
-        uses: Nature40/pimod@v0.3.0
+        uses: Nature40/pimod@v0.6.0
         with:
           pifile: ${{ matrix.config.finalfile }}.Pifile
       - 
@@ -183,15 +183,14 @@ jobs:
       - 
         name: Upload zip to release
         id: upload_zip
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_VERSION: ${{ steps.get_version.outputs.version }}
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{needs.release.outputs.release_upload_url}}
-          asset_path: opendsh-${{ steps.get_version.outputs.version }}.zip
-          asset_name: opendsh-${{ steps.get_version.outputs.version }}.zip
-          asset_content_type: application/zip
+          generate_release_notes: true
+          name: ${{ steps.get_version.outputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          files: opendsh-${{ steps.get_version.outputs.version }}.zip
+          append_body: true
+          draft: true
       - 
         name: Get File Hashes from files
         id: filehashes
