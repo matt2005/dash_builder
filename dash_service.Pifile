@@ -2,7 +2,7 @@ PUMP 1000M
 
 INSTALL "scripts/dash.service" "/etc/systemd/system/"
 
-RUN <<'EOF'
+RUN bash -c '
 systemctl enable dash.service
 apt -y install --no-install-recommends raspberrypi-ui-mods lxsession
 systemctl set-default graphical.target
@@ -13,4 +13,4 @@ ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOCAT
 sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=pi/"
-EOF
+'

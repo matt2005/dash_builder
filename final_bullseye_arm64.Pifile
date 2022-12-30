@@ -1,3 +1,3 @@
 FROM compile_bullseye_arm64.img
 
-source final_bullseye.Pifile
+INCLUDE final_bullseye.Pifile

@@ -1,28 +1,28 @@
 # recompile pulseaudio to fix imtu bug for internal bluetooth when using HFP
 
-RUN <<'EOF'
-sed -i 's/#deb-src/deb-src/g' /etc/apt/sources.list
+RUN bash -c '
+sed -i \'s/#deb-src/deb-src/g\' /etc/apt/sources.list
 apt-get update -y
 git clone git://anongit.freedesktop.org/pulseaudio/pulseaudio
 apt-get install -y autopoint
 cd pulseaudio
 git checkout tags/v12.99.3
-sed -i 's/*imtu = 48;/*imtu = 60;/g' src/modules/bluetooth/backend-native.c
-sed -i 's/*imtu = 48;/*imtu = 60;/g' src/modules/bluetooth/backend-ofono.c
+sed -i \'s/*imtu = 48;/*imtu = 60;/g\' src/modules/bluetooth/backend-native.c
+sed -i \'s/*imtu = 48;/*imtu = 60;/g\' src/modules/bluetooth/backend-ofono.c
 sudo apt-get build-dep -y pulseaudio
 ./bootstrap.sh
 make -j4
 make install
 ldconfig
-# copy configs and force an exit 0 just in case files are identical (we don't care but it will make pimod exit)
+# copy configs and force an exit 0 just in case files are identical (we don\'t care but it will make pimod exit)
 cp /usr/share/pulseaudio/alsa-mixer/profile-sets/* /usr/local/share/pulseaudio/alsa-mixer/profile-sets/
-EOF
+'
 
 #install ofono to support bluetooth HFP
 
-RUN <<'EOF'
+RUN bash -c '
 sudo apt-get install -y ofono
-sed -i 's/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g' /usr/local/etc/pulse/default.pa
+sed -i \'s/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g\' /usr/local/etc/pulse/default.pa
 cat <<EOT >> /usr/local/etc/pulse/default.pa
 ### Echo cancel and noise reduction
 .ifexists module-echo-cancel.so
@@ -31,9 +31,9 @@ set-default-source ec_out
 set-default-sink ec_ref
 .endif
 EOT
-EOF
+'
 
-RUN <<'EOF'
+RUN bash -c '
 cd /home/pi
 sudo apt-get install -y libdbus-1-dev libudev-dev libical-dev libreadline-dev libjson-c-dev
 wget www.kernel.org/pub/linux/bluetooth/bluez-5.63.tar.xz
@@ -43,9 +43,9 @@ cd bluez-5.63
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library --disable-manpages --enable-deprecated
 make
 sudo make install
-EOF
+'
 
-RUN <<'EOF'
+RUN bash -c '
 # add network, bluetooth, pulse volume to lxpanel
 # mkdir -p /home/pi/.config/lxpanel/LXDE-pi/panels
 # touch /home/pi/.config/lxpanel/LXDE-pi/panel
@@ -68,4 +68,4 @@ RUN <<'EOF'
 # EOT
 apt-get -y install xcompmgr
 echo "xcompmgr -C -c -o 0.5 -l -19 -t -10 -r 14" >> /etc/xdg/lxsession/LXDE-pi/autostart
-EOF
+'
