@@ -1,4 +1,4 @@
-RUN bash -c '
+RUN bash -c $'
 cat <<EOT >> /boot/config.txt
 [pi4]
 arm_freq=1800
@@ -25,7 +25,6 @@ cat <<EOT >> /etc/network/interfaces
 #    bitrate 33330
 EOT
 #Setup network interfaces
-RUN bash -c '
 apt-get -y install network-manager links
 raspi-config nonint do_netconf 2
 # setup access point

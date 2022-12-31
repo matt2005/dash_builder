@@ -1,6 +1,6 @@
 # recompile pulseaudio to fix imtu bug for internal bluetooth when using HFP
 
-RUN bash -c '
+RUN bash -c $'
 sed -i \'s/#deb-src/deb-src/g\' /etc/apt/sources.list
 apt-get update -y
 git clone git://anongit.freedesktop.org/pulseaudio/pulseaudio

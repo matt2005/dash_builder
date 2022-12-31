@@ -1,7 +1,7 @@
 PUMP 1500M
 
 # Update OS and sources
-RUN bash -c '
+RUN bash -c $'
 export LC_ALL=C
 export LANG=en_US.UTF-8
 echo -e \'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n\' > /etc/default/locale

@@ -2,7 +2,7 @@ PUMP 1000M
 
 INSTALL "scripts/dash.service" "/etc/systemd/system/"
 
-RUN bash -c '
+RUN bash -c $'
 systemctl enable dash.service
 apt -y install --no-install-recommends raspberrypi-ui-mods lxsession
 systemctl set-default graphical.target
