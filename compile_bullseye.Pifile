@@ -1,8 +1,5 @@
 PUMP 1000M
-# fix sudo
-RUN bash -c $'
-sudo hostnamectl set-hostname opendsh
-'
+
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
 RUN apt-get -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
 RUN apt-get -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils  
@@ -13,16 +10,16 @@ RUN apt-get -y install pixflat-icons lxplug-bluetooth lxplug-volumepulse lxplug-
 RUN bash -c "cd /home/pi && sudo -u pi git clone https://github.com/openDsh/dash"
 RUN bash -c "cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j$(nproc)/g' install.sh"
 
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --deps"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --aasdk"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --h264bitstream"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --gstreamer"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --pulseaudio"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --bluez"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --ofono"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --deps"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --aasdk"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --h264bitstream"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --gstreamer"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --pulseaudio"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --bluez"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --ofono"
 RUN bash -c "cd /home/pi/dash && sed -i 's/0006/b03111/g' cmake_modules/functions.cmake"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --openauto"
-RUN bash -c "cd /home/pi/dash && sudo -u pi ./install.sh --dash"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --openauto"
+RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --dash"
 RUN bash -c "sudo -u pi mkdir -p /home/pi/.config/openDsh"
 
 # Add autologin and dash service

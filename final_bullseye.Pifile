@@ -1,7 +1,3 @@
-# fix sudo
-RUN bash -c $'
-sudo hostnamectl set-hostname opendsh
-'
 # Install dash conf
 INSTALL "scripts/dash.conf" "/home/pi/.config/openDsh/dash.conf"
 
