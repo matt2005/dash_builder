@@ -1,7 +1,7 @@
 PUMP 1000M
 # fix sudo
 RUN bash -c $'
-sudo rm /etc/hosts
+sudo hostnamectl set-hostname opendsh
 '
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
 RUN apt-get -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
