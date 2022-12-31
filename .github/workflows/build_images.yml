@@ -49,15 +49,15 @@ jobs:
               osname: "bullseye",
               ostype: "Debian"
             }
-        # - {
-        #     name: "Debian bullseye armhf",
-        #     basefile: "base_bullseye_armhf",
-        #     compilefile: "compile_bullseye_armhf",
-        #     finalfile: "final_bullseye_armhf",
-        #     arch: "armhf",
-        #     osname: "bullseye",
-        #     ostype: "Debian"
-        #   }
+         - {
+             name: "Debian bullseye armhf",
+             basefile: "base_bullseye_armhf",
+             compilefile: "compile_bullseye_armhf",
+             finalfile: "final_bullseye_armhf",
+             arch: "armhf",
+             osname: "bullseye",
+             ostype: "Debian"
+           }
     name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - 
@@ -156,12 +156,12 @@ jobs:
               osname: "bullseye",
               ostype: "Debian"
             }
-          #- {
-          #    name: "Debian bullseye armhf",
-          #    arch: "armhf",
-          #    osname: "bullseye",
-          #    ostype: "Debian"
-          #  }
+          - {
+              name: "Debian bullseye armhf",
+              arch: "armhf",
+              osname: "bullseye",
+              ostype: "Debian"
+            }
     name: 'Upload release:  ${{ matrix.config.name }}'
     steps:
       - 
