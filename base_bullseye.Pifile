@@ -1,5 +1,9 @@
 PUMP 1500M
 
+# fix sudo
+RUN bash -c $'
+sudo rm /etc/hosts
+'
 # Update OS and sources
 RUN bash -c $'
 export LC_ALL=C
