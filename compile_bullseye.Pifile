@@ -1,5 +1,8 @@
 PUMP 1000M
-
+# fix sudo
+RUN bash -c $'
+sudo rm /etc/hosts
+'
 # https://github.com/openDsh/dash/issues/63#issuecomment-821121874
 RUN apt-get -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
 RUN apt-get -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils  

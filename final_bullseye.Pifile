@@ -1,3 +1,7 @@
+# fix sudo
+RUN bash -c $'
+sudo rm /etc/hosts
+'
 # Install dash conf
 INSTALL "scripts/dash.conf" "/home/pi/.config/openDsh/dash.conf"
 
