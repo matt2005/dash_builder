@@ -16,11 +16,7 @@ make install
 ldconfig
 # copy configs and force an exit 0 just in case files are identical (we don\'t care but it will make pimod exit)
 cp /usr/share/pulseaudio/alsa-mixer/profile-sets/* /usr/local/share/pulseaudio/alsa-mixer/profile-sets/
-'
-
 #install ofono to support bluetooth HFP
-
-RUN bash -c '
 sudo apt-get install -y ofono
 sed -i \'s/load-module module-bluetooth-discover/load-module module-bluetooth-discover headset=ofono/g\' /usr/local/etc/pulse/default.pa
 cat <<EOT >> /usr/local/etc/pulse/default.pa
@@ -31,9 +27,6 @@ set-default-source ec_out
 set-default-sink ec_ref
 .endif
 EOT
-'
-
-RUN bash -c '
 cd /home/pi
 sudo apt-get install -y libdbus-1-dev libudev-dev libical-dev libreadline-dev libjson-c-dev
 wget www.kernel.org/pub/linux/bluetooth/bluez-5.63.tar.xz
@@ -43,9 +36,6 @@ cd bluez-5.63
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-library --disable-manpages --enable-deprecated
 make
 sudo make install
-'
-
-RUN bash -c '
 # add network, bluetooth, pulse volume to lxpanel
 # mkdir -p /home/pi/.config/lxpanel/LXDE-pi/panels
 # touch /home/pi/.config/lxpanel/LXDE-pi/panel
