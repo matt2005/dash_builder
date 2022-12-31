@@ -2,7 +2,6 @@ PUMP 1500M
 
 # fix sudo
 RUN bash -c $'
-sudo rm /etc/hosts
 sudo hostnamectl set-hostname opendsh
 '
 # Update OS and sources
