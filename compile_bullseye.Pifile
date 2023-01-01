@@ -1,6 +1,7 @@
 PUMP 1000M
 
 # Update OS and sources
+INSTALL 777 "patches/dash_pimod.patch" "/home/pi/dash_pimod.patch"
 INSTALL 777 "scripts/compile.sh" "/root/run.sh"
 RUN bash /root/run.sh 
 RUN rm /root/run.sh
