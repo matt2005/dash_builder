@@ -10,7 +10,7 @@ apt-get -y install pixflat-icons lxplug-bluetooth lxplug-volumepulse lxplug-netw
 cd /home/pi && sudo -u pi git clone https://github.com/openDsh/dash
 cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j$(nproc)/g' install.sh
 cp /home/pi/dash_pimod.patch /home/pi/dash/
-git apply dash_pimod.patch
+cd /home/pi/dash && git apply dash_pimod.patch
 
 cd /home/pi/dash && sudo -u pi bash ./install.sh --deps
 cd /home/pi/dash && sudo -u pi bash ./install.sh --aasdk
