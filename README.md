@@ -43,6 +43,10 @@ docker run --rm --privileged \
     pimod.sh /files/final_bullseye_armhf.pifile
 mv final_bullseye_armhf.pifile.img final_bullseye_armhf.img
 ```
+
+```bash
+docker run -it -v $PWD/final_bullseye_armhf.img:/sdcard/filesystem.img lukechilds/dockerpi
+```
 ## Credits
 
 @matt2005
