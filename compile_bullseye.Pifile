@@ -1,26 +1,9 @@
 PUMP 1000M
 
-# https://github.com/openDsh/dash/issues/63#issuecomment-821121874
-RUN apt-get -y install wget software-properties-common dirmngr apt-transport-https lsb-release ca-certificates git sudo
-RUN apt-get -y install --no-install-recommends xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils  
-RUN apt-get -y install gstreamer1.0-plugins-good gstreamer1.0-omx xserver-xorg-video-fbturbo
-
-# add in pi ux tweaks (icons + lxpanel plugins)
-RUN apt-get -y install pixflat-icons lxplug-bluetooth lxplug-volumepulse lxplug-network
-RUN bash -c "cd /home/pi && sudo -u pi git clone https://github.com/openDsh/dash"
-RUN bash -c "cd /home/pi/dash && sed -i 's/\(^\s*\)\(make\)\($\)/\1make -j$(nproc)/g' install.sh"
-
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --deps"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --aasdk"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --h264bitstream"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --gstreamer"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --pulseaudio"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --bluez"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --ofono"
-RUN bash -c "cd /home/pi/dash && sed -i 's/0006/b03111/g' cmake_modules/functions.cmake"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --openauto"
-RUN bash -c "cd /home/pi/dash && sudo -u pi bash ./install.sh --dash"
-RUN bash -c "sudo -u pi mkdir -p /home/pi/.config/openDsh"
+# Update OS and sources
+INSTALL 777 "scripts/compile.sh" "/root/run.sh"
+RUN bash /root/run.sh 
+RUN rm /root/run.sh
 
 # Add autologin and dash service
 INCLUDE dash_service.Pifile

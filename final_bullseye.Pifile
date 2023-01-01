@@ -1,7 +1,6 @@
+
 # Install dash conf
 INSTALL "scripts/dash.conf" "/home/pi/.config/openDsh/dash.conf"
-
-RUN chown pi:pi /home/pi/.config/openDsh/dash.conf
 
 # Install openauto conf
 INSTALL "scripts/openauto.ini" "/home/pi/dash/openauto.ini"
@@ -9,13 +8,9 @@ INSTALL "scripts/openauto.ini" "/home/pi/dash/openauto.ini"
 # Add udev rules
 INSTALL "scripts/51-dashusb.rules" "/etc/udev/rules.d/"
 
-RUN chown pi:pi /home/pi/dash/openauto.ini
-
-RUN apt-get install -y xserver-xorg-input-evdev
-RUN rm /usr/share/X11/xorg.conf.d/40-libinput.conf
-
-RUN mkdir -p /usr/share/X11/xorg.conf.d
-
 INSTALL "scripts/40-libinput.conf" "/usr/share/X11/xorg.conf.d/40-libinput.conf"
-
 INSTALL scripts/firstrun.sh /boot/firstrun.sh
+
+INSTALL 777 "scripts/final.sh" "/root/run.sh"
+RUN bash /root/run.sh 
+RUN rm /root/run.sh
