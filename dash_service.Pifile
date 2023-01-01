@@ -1,5 +1,3 @@
-PUMP 1000M
-
 INSTALL "scripts/dash.service" "/etc/systemd/system/"
 INSTALL 777 "scripts/dash_service.sh"  "/root/run.sh"
 RUN bash /root/run.sh 

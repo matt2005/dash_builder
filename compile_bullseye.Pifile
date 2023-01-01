@@ -9,5 +9,4 @@ RUN rm /root/run.sh
 # Add autologin and dash service
 INCLUDE dash_service.Pifile
 INCLUDE configuration.Pifile
-#PUMP 1000M
-#INCLUDE pulseaudio_hfp_ofono.Pifile
+

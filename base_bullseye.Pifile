@@ -1,4 +1,4 @@
-PUMP 1500M
+PUMP 1000M
 
 # Update OS and sources
 INSTALL 777 "scripts/base.sh" "/root/run.sh"
