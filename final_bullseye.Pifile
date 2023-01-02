@@ -1,5 +1,6 @@
 
 # Install dash conf
+RUN mkdir -p /home/pi/.config/openDsh
 INSTALL "scripts/dash.conf" "/home/pi/.config/openDsh/dash.conf"
 
 # Install openauto conf
