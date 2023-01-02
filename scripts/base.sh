@@ -8,7 +8,6 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
 apt-get install -y sl
-apt-get autoremove -y
 useradd -m pi
 echo pi:opendsh | chpasswd
 sudo adduser pi sudo
@@ -19,3 +18,6 @@ ntpdate 0.us.pool.ntp.org
 service ntp start
 # Disable boot text
 echo -n "logo.nologo loglevel=3 quiet plymouth.ignore-serial-consoles fastboot systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target" >>  /boot/cmdline.txt
+# clear apt
+apt-get clean autoclean
+apt-get autoremove --yes

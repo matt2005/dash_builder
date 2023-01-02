@@ -26,4 +26,5 @@ cd /home/pi/dash && sed -i 's/0006/a01041/g' cmake_modules/functions.cmake
 cd /home/pi/dash && sudo -u pi bash ./install.sh --openauto
 cd /home/pi/dash && sudo -u pi bash ./install.sh --dash
 sudo -u pi mkdir -p /home/pi/.config/openDsh
-sudo apt-get autoremove -y
+sudo apt-get clean autoclean
+sudo apt-get autoremove --yes
