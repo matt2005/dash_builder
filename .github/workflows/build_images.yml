@@ -7,27 +7,27 @@ on:
       - 'releases/**'
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version'
+      release:
+        description: 'Release Version'
 jobs:
   version:
     outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      release: ${{ steps.get_version.outputs.release }}
     runs-on: "ubuntu-latest"
     steps:
       - 
-        name: Get the version
+        name: Get the release version
         id: get_version
         run: |
-          if [ -z "$version" ]
+          if [ -z "$release" ]
           then
-                version=$(date '+%Y%m%d')
-                echo version="${version}" >> $GITHUB_OUTPUT
+                release=$(date '+%Y%m%d')
+                echo release="${release}" >> $GITHUB_OUTPUT
           else
-                echo version="${version}" >> $GITHUB_OUTPUT
+                echo release="${release}" >> $GITHUB_OUTPUT
           fi
         env:
-          version: ${{ github.event.inputs.version }}
+          release: ${{ github.event.inputs.release }}
   build:
     runs-on: ${{ matrix.host }}
     needs: [ version ]
@@ -71,9 +71,10 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          echo version="${version}-${osname}-${arch}" >> $GITHUB_OUTPUT
+          echo version="${release}-${osname}-${arch}" >> $GITHUB_OUTPUT
+          echo release="${release}" >> $GITHUB_OUTPUT
         env:
-          version: ${{needs.version.outputs.version }}
+          release: ${{needs.version.outputs.release }}
           arch: ${{ matrix.config.arch }}
           ostype: ${{ matrix.config.ostype }}
           osname: ${{ matrix.config.osname }}
@@ -114,7 +115,7 @@ jobs:
         id: upload_deploy
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.release }}
           path: |
             ${{ steps.packagezip.outputs.ZIP_FILENAME }}
             ${{ steps.packagezip.outputs.MD5ZIPHASHFILE }}
@@ -172,9 +173,10 @@ jobs:
           then 
                 osname=${ostype}_${osname}
           fi
-          echo version="${version}-${osname}-${arch}" >> $GITHUB_OUTPUT
+          echo version="${release}-${osname}-${arch}" >> $GITHUB_OUTPUT
+          echo release="${release}" >> $GITHUB_OUTPUT
         env:
-          version: ${{needs.version.outputs.version }}
+          release: ${{needs.version.outputs.release }}
           arch: ${{ matrix.config.arch }}
           osname: ${{ matrix.config.osname }}
           ostype: ${{ matrix.config.ostype }}
@@ -182,15 +184,15 @@ jobs:
         name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.release }}
       - 
         name: Upload zip to release
         id: upload_zip
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
-          name: ${{ steps.get_version.outputs.version }}
-          tag_name: ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.release }}
+          tag_name: ${{ steps.get_version.outputs.release }}
           files: opendsh-${{ steps.get_version.outputs.version }}.zip
           append_body: true
           draft: true
@@ -204,3 +206,13 @@ jobs:
           echo ${MD5_ZIPHASH}
           echo ZIP_FILENAME="${ZIP_FILENAME}" >> $GITHUB_OUTPUT
           echo MD5_ZIPHASH="${MD5_ZIPHASH}" >> $GITHUB_OUTPUT
+      - 
+        name: Append hashes to release
+        id: append_hashes_to_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ steps.get_version.outputs.release }}
+          tag_name: ${{ steps.get_version.outputs.release }}
+          body: "ZIP: ${{ steps.filehashes.outputs.ZIP_FILENAME }}  MD5 Hash: ${{ steps.filehashes.outputs.MD5_ZIPHASH }}"
+          append_body: true
+          draft: true
